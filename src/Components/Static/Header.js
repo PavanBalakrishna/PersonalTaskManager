@@ -1,7 +1,7 @@
 import React from 'react'
-import {Navbar,Nav,Jumbotron,Container,Row,Col} from 'react-bootstrap';
+import {Navbar,Nav,Container,Row,Col} from 'react-bootstrap';
 
-import {Link}  from "react-router-dom";
+//import {Link}  from "react-router-dom";
 
 export default function Header() {
   
@@ -15,7 +15,7 @@ export default function Header() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                <Nav.Link as={Link} to="/">Home</Nav.Link>
+                {/* <Nav.Link as={Link} to="/">Home</Nav.Link> */}
                 
                 
                

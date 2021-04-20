@@ -1,10 +1,10 @@
-[
+export const SubGoalsData = [
     {
       "id": 1,
       "Name": "Minna No Nihongo N5",
       "Description": "Revise minna no nihongo N5",
       "Cycles": 5,
-      "Total": {},
+      "Total": 375,
       "Goal_ID": 1
     },
     {
@@ -12,7 +12,7 @@
       "Name": "Genki N5",
       "Description": "Revise Genki N5",
       "Cycles": 5,
-      "Total": {},
+      "Total": 187.5,
       "Goal_ID": 1
     },
     {
@@ -20,7 +20,7 @@
       "Name": "Vocabulary",
       "Description": "Revise Vocabulary",
       "Cycles": 10,
-      "Total": {},
+      "Total": 250,
       "Goal_ID": 1
     },
     {
@@ -28,7 +28,7 @@
       "Name": "Machine Learning Youtube",
       "Description": "Machine Learning from Youtube",
       "Cycles": 1,
-      "Total": {},
+      "Total": 130,
       "Goal_ID": 2
     },
     {
@@ -36,7 +36,7 @@
       "Name": "Interview Prep",
       "Description": "Interview Prep",
       "Cycles": 1,
-      "Total": {},
+      "Total": 400,
       "Goal_ID": 2
     },
     {
@@ -44,7 +44,7 @@
       "Name": "Python Prep - Krish Nair",
       "Description": "Python Prep - Krish Nair from youtube",
       "Cycles": 1,
-      "Total": {},
+      "Total": 50,
       "Goal_ID": 2
     },
     {
@@ -52,7 +52,7 @@
       "Name": "Tablue",
       "Description": "Study tablue Course certification",
       "Cycles": 1,
-      "Total": {},
+      "Total": 80,
       "Goal_ID": 2
     },
     {
@@ -68,7 +68,7 @@
       "Name": "Fitness",
       "Description": "Fitness",
       "Cycles": 1,
-      "Total": {},
+      "Total": 1600,
       "Goal_ID": 3
     },
 
@@ -76,8 +76,8 @@
       "id": 10,
       "Name": "Financial Planning",
       "Description": "Financial Planning for family",
-      "Cycles": 0,
-      "Total": {},
+      "Cycles": 1,
+      "Total": 170,
       "Goal_ID": 5
     },
     {
@@ -85,7 +85,7 @@
       "Name": "Reading Study",
       "Description": "Book reading",
       "Cycles": 5,
-      "Total": {},
+      "Total": 500,
       "Goal_ID": 6
     },
     {
@@ -93,7 +93,7 @@
         "Name": "Reading Personal",
         "Description": "Book reading Personal",
         "Cycles": 5,
-        "Total": {},
+        "Total": 1480,
         "Goal_ID": 6
       }
   ]
