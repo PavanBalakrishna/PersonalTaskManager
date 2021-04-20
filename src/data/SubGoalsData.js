@@ -69,7 +69,7 @@ export const SubGoalsData = [
       "Description": "Fitness",
       "Cycles": 1,
       "Total": 1600,
-      "Goal_ID": 3
+      "Goal_ID": 4
     },
 
     {

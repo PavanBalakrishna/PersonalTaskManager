@@ -15,10 +15,10 @@ export default function GoalsList({ClickGoal}) {
                 </Row>
             <Row>
                 <Col>
-                <Table striped bordered hover variant="dark" size="sm">
+                <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
-                    <th>ID</th>
+                    {/* <th>ID</th> */}
                     <th>Name</th>
                     <th>Description</th>
                     <th>Category</th>
@@ -30,7 +30,7 @@ export default function GoalsList({ClickGoal}) {
                     {
                         GoalsData.map((goal)=>{
                             return <tr key={goal.id} onClick={()=> {ClickGoal(goal)}}>
-                            <td>{goal.id}</td>
+                            {/* <td>{goal.id}</td> */}
                             <td>{goal.Name}</td>
                             <td>{goal.Description}</td>
                             <td>{goal.Category}</td>
@@ -45,7 +45,7 @@ export default function GoalsList({ClickGoal}) {
 
                 </Col>
             </Row>
-                            </Container>
+        </Container>
             )
        
     

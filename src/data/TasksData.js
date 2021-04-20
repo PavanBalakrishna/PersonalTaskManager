@@ -1,4 +1,4 @@
-[
+export const TasksData = [
     {
       "id": 1,
       "Name": "Minna No Nihongo N5",
@@ -76,7 +76,7 @@
       "Name": "Walking",
       "Description": "Walking",
       "Source": "Self",
-      "TimePerCycle": 0,
+      "TimePerCycle": 0.5,
       "SubGoal_ID": 9
     },
     {
@@ -84,7 +84,7 @@
       "Name": "Yoga",
       "Description": "Yoga",
       "Source": "Self",
-      "TimePerCycle": 0,
+      "TimePerCycle": 1,
       "SubGoal_ID": 9
     },
     {
@@ -111,7 +111,6 @@
       "TimePerCycle": 0,
       "SubGoal_ID": 11
     },
-    null,
     {
       "id": 17,
       "Name": "Book reading - Entertainment",

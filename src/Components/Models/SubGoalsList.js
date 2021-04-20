@@ -1,9 +1,18 @@
 import React,{useEffect,useState} from 'react'
 import {SubGoalsData} from '../../data/SubGoalsData'
-import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem} from 'react-bootstrap';
+import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
+import TaskList from './TaskList'
 
 export default function SubGoalsList({setShowGoalsList , goal}) {
-    const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData)
+    const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData);
+    const [selectedsubgoal, setselectedsubgoal] = useState({});
+    const [ShowTasksState, setShowTasks] = useState(false);
+    const ShowTasks=(subgoal)=>{
+        setselectedsubgoal(subgoal);
+        setShowTasks(!ShowTasksState);
+        
+    } 
+
     useEffect(() => {
         setSubGoalsState(()=> SubGoalsData.filter((sg)=>{return sg.Goal_ID===goal.id}))
     }, [goal])
@@ -38,7 +47,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
             <Table striped bordered hover >
             <thead>
                 <tr>
-                <th>ID</th>
+                {/* <th>ID</th> */}
                 <th>Name</th>
                 <th>Description</th>
                 <th>Total Cycles</th>
@@ -49,23 +58,33 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
             <tbody>
                 {
                     SubGoalsState.map((subgoal)=>{
-                        return <tr key={subgoal.id}>
-                        <td>{subgoal.id}</td>
+                        return <><tr key={subgoal.id} onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
+                        {/* <td>{subgoal.id}</td> */}
                         <td>{subgoal.Name}</td>
                         <td>{subgoal.Description}</td>
                         <td>{subgoal.Cycles}</td>
                         <td>{subgoal.Total}</td>
-                        <td></td>
+                        
                         </tr>
-                       
+                       </>
                     })
                 }
                 </tbody>
             </Table>
             </Col>
         </Row>
-        
-            </Container>
+        {
+            ShowTasksState &&
+            <Row>
+            <Col sm='12'>
+            <Collapse in={ShowTasksState} timeout='5000'>
+                    <TaskList id='tasklist-show' subgoal={selectedsubgoal}>
+                    </TaskList>
+                </Collapse>
+            </Col>
+            </Row>
+        }
+    </Container>
 
     )
 }
