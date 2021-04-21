@@ -1,6 +1,6 @@
 import React from 'react'
 import {GoalsData} from '../../data/GoalsData'
-import {Container,Row,Col,Table} from 'react-bootstrap';
+import {Container,Row,Col,Table,Card} from 'react-bootstrap';
 
 export default function GoalsList({ClickGoal}) {
 
@@ -10,12 +10,18 @@ export default function GoalsList({ClickGoal}) {
             <Container fluid>
                 <Row>
                     <Col>
-                        <h3>Goal List </h3>
+                    <Card>
+                    
+                    <Card.Body>
+                    <Card.Title>Goals</Card.Title>    
+                        
+                    </Card.Body>
+                </Card>
                     </Col>
                 </Row>
             <Row>
                 <Col>
-                <Table striped bordered hover variant="dark">
+                <Table striped bordered responsive hover>
                 <thead>
                     <tr>
                     {/* <th>ID</th> */}

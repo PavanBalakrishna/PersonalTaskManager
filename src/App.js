@@ -8,6 +8,7 @@ import {
 import Header from './Components/Static/Header'
 import Footer from './Components/Static/Footer'
 import Home from './Components/Pages/Home'
+import AddTask from './Components/Pages/AddTask'
 
 
 
@@ -23,8 +24,11 @@ function App() {
     </Row>
     <Row>
     <Switch>
-          <Route path="/">
+          <Route path="/List">
             <Home />
+          </Route>
+          <Route path="/">
+            <AddTask />
           </Route>
         </Switch>
     </Row>

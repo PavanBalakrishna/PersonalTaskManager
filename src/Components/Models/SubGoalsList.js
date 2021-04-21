@@ -9,7 +9,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
     const [ShowTasksState, setShowTasks] = useState(false);
     const ShowTasks=(subgoal)=>{
         setselectedsubgoal(subgoal);
-        setShowTasks(!ShowTasksState);
+        setShowTasks(true);
         
     } 
 
@@ -43,15 +43,15 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
         </Col>
         </Row>
         <Row>
-            <Col>
-            <Table striped bordered hover >
+            <Col sm='3'>
+            <Table striped bordered hover responsive>
             <thead>
                 <tr>
                 {/* <th>ID</th> */}
                 <th>Name</th>
-                <th>Description</th>
+                {/* <th>Description</th>
                 <th>Total Cycles</th>
-                <th>Total Estimated Time</th>
+                <th>Total Estimated Time</th> */}
                 
                 </tr>
             </thead>
@@ -61,9 +61,9 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                         return <><tr key={subgoal.id} onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
                         {/* <td>{subgoal.id}</td> */}
                         <td>{subgoal.Name}</td>
-                        <td>{subgoal.Description}</td>
+                        {/* <td>{subgoal.Description}</td>
                         <td>{subgoal.Cycles}</td>
-                        <td>{subgoal.Total}</td>
+                        <td>{subgoal.Total}</td> */}
                         
                         </tr>
                        </>
@@ -72,18 +72,19 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                 </tbody>
             </Table>
             </Col>
-        </Row>
-        {
+            {
             ShowTasksState &&
-            <Row>
-            <Col sm='12'>
+            
+            <Col sm='9'>
             <Collapse in={ShowTasksState} timeout='5000'>
                     <TaskList id='tasklist-show' subgoal={selectedsubgoal}>
                     </TaskList>
                 </Collapse>
             </Col>
-            </Row>
+            
         }
+        </Row>
+       
     </Container>
 
     )
