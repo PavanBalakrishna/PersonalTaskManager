@@ -13,7 +13,8 @@ const FileService ={
                 var params = {
                 Body: taskeventstring,
                 Bucket: "ptm.pavanbalakrishna.com",
-                Key:"data/TaskEvents.json"
+                Key:"data/TaskEvents.json",
+                ACL:'public-read'
                 };
                 
                 s3.putObject(params,(err, responseData)=>{

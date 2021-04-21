@@ -2,11 +2,13 @@ import React,{useEffect,useState} from 'react'
 import {SubGoalsData} from '../../data/SubGoalsData'
 import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
 import TaskList from './TaskList'
+import CustomPieChart from '../Charts/CustomPieChart';
 
 export default function SubGoalsList({setShowGoalsList , goal}) {
     const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
+    const [subgoalchartData, setsubgoalchartData] = useState();
     const ShowTasks=(subgoal)=>{
         setselectedsubgoal(subgoal);
         setShowTasks(true);
@@ -14,7 +16,15 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
     } 
 
     useEffect(() => {
-        setSubGoalsState(()=> SubGoalsData.filter((sg)=>{return sg.Goal_ID===goal.id}))
+        let filteredGoals =SubGoalsData.filter((sg)=>{return sg.Goal_ID===goal.id});
+        setSubGoalsState(filteredGoals);
+
+        let sgChartData=[];
+        filteredGoals.forEach(sg => {
+            sgChartData.push({name:sg.Name, value:sg.Total})
+        });
+        setsubgoalchartData(sgChartData);
+
     }, [goal])
     
     const BackToGoalList= ()=>{
@@ -32,12 +42,25 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                         <Card.Text>
                             {goal.Description}
                         </Card.Text>
-                        <ListGroup className="list-group-flush">
-                            <ListGroupItem>Category : {goal.Category}</ListGroupItem>
-                            <ListGroupItem>Start date : {new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</ListGroupItem>
-                            <ListGroupItem>End date : {new Date(goal.EndDate).getFullYear()+'/'+(new Date(goal.EndDate).getMonth()+1)+'/'+new Date(goal.EndDate).getDate()}</ListGroupItem>
-                        </ListGroup>
-                        <Button variant="danger" onClick={BackToGoalList} >Go back</Button>
+                        <Container fluid>
+                            <Row>
+                                <Col sm='6'>
+                                <ListGroup className="list-group-flush">
+                                    <ListGroupItem>Category : {goal.Category}</ListGroupItem>
+                                    <ListGroupItem>Start date : {new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</ListGroupItem>
+                                    <ListGroupItem>End date : {new Date(goal.EndDate).getFullYear()+'/'+(new Date(goal.EndDate).getMonth()+1)+'/'+new Date(goal.EndDate).getDate()}</ListGroupItem>
+                                </ListGroup>
+                                <Button variant="danger" onClick={BackToGoalList} >Go back</Button>
+                                </Col>
+                                <Col sm='4'>
+                                    
+                                    <CustomPieChart chartData={subgoalchartData} color='#ffcc00'>
+                                    </CustomPieChart>
+                                </Col>
+                            </Row>
+                        </Container>
+                       
+                        
                     </Card.Body>
                 </Card>
         </Col>
