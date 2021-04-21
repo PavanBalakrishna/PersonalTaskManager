@@ -3,6 +3,7 @@ import {GoalsData} from "../../data/GoalsData";
 import {SubGoalsData} from "../../data/SubGoalsData";
 import {TasksData} from "../../data/TasksData";
 import {Container,Row,Col,Card,Form,Button,Modal,ListGroup,ListGroupItem} from 'react-bootstrap';
+import FileService from '../../Services/FileService';
 
 export default function AddTask() {
     const [goalliststate, setgoalliststate] = useState(GoalsData);
@@ -49,7 +50,9 @@ export default function AddTask() {
 
             taskdata.push(newtaskevent);
             
-            console.log(JSON.stringify(taskdata));
+            
+
+            FileService.SaveTaskEventsToAWS(taskdata);
             setshowAddTaskForm(false);
             
         });

@@ -9,12 +9,17 @@ const FileService ={
                 region:"ap-northeast-1"
             })
             var s3 = new AWS.S3();
-
+            let taskeventstring = JSON.stringify(taskEventList);
                 var params = {
+                Body: taskeventstring,
                 Bucket: "ptm.pavanbalakrishna.com",
-                MaxKeys:10
+                Key:"data/TaskEvents.json"
                 };
-                s3.putObject()
+                
+                s3.putObject(params,(err, responseData)=>{
+                    if (err) console.log(err, err.stack); // an error occurred
+                    else     console.log('success');           // successful response
+                })
 
     }
 }
