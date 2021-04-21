@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {GoalsData} from "../../data/GoalsData";
 import {SubGoalsData} from "../../data/SubGoalsData";
 import {TasksData} from "../../data/TasksData";
-import {Container,Row,Col,Card,Form,Button} from 'react-bootstrap';
+import {Container,Row,Col,Card,Form,Button,Modal,ListGroup,ListGroupItem} from 'react-bootstrap';
 
 export default function AddTask() {
     const [goalliststate, setgoalliststate] = useState(GoalsData);
@@ -17,7 +17,27 @@ export default function AddTask() {
     const [selectedTask, setselectedTask] = useState();
     const [showTasks, setshowTasks] = useState(false);
 
+    const [addedTask, setaddedTask] = useState();
+
     const [showButton, setshowButton] = useState(false);
+
+    const [showAddTaskForm, setshowAddTaskForm] = useState(false);
+
+    const [addTaskTime, setaddTaskTime] = useState();
+    const [addTaskDescription, setaddTaskDescription] = useState()
+
+    //Function to show add task modal
+    const AddTaskButtonClick=()=>{
+
+
+        setshowAddTaskForm(true);
+    }
+
+    const AddTask=()=>{
+
+        setshowAddTaskForm(false);
+    }
+
     return (
         <Container fluid>
             <Row>
@@ -131,7 +151,7 @@ export default function AddTask() {
                     
                     <Form.Group>
                         
-                         <Button variant='success' className='form-control'>
+                         <Button variant='success' className='form-control' onClick={AddTaskButtonClick}>
                              Add
                          </Button>
                         </Form.Group>      
@@ -139,7 +159,43 @@ export default function AddTask() {
                 </Col>
                 </Row>
                 }
-            
+                {
+                    showAddTaskForm && 
+
+                    <Modal show={showAddTaskForm} onHide={()=>{ setshowAddTaskForm(false)}}>
+                        <Modal.Header closeButton>
+                        <Modal.Title>{selectedTask.Name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Card>
+                            <Card.Body>
+                                <Card.Text>
+                                    {selectedTask.Description}
+                                </Card.Text>
+                                    <ListGroup className="list-group-flush">
+                                        <ListGroupItem>Source : {selectedTask.Source}</ListGroupItem>
+                                        <ListGroupItem>TimePerCycle : {selectedTask.TimePerCycle}</ListGroupItem>
+                                    </ListGroup>
+                                    <Form.Group >
+                                        <Form.Label>Time Spent (Hours)</Form.Label>
+                                        <Form.Control type="number" placeholder="0" onChange={(e)=>{setaddTaskTime(e.target.value)}} />
+                                        <Form.Label>Activity Details</Form.Label>
+                                        <Form.Control as="textarea" placeholder="" onChange={(e)=>{setaddTaskDescription(e.target.value)}} />
+                                    </Form.Group>
+                                </Card.Body>
+                            </Card>
+                        </Modal.Body>
+                        <Modal.Footer>
+                        <Button variant="secondary" onClick={()=>{ setshowAddTaskForm(false) }}>
+                            Close
+                        </Button>
+                        <Button variant="primary" onClick={AddTask}>
+                            Add Task
+                        </Button>
+                        </Modal.Footer>
+                </Modal>
+                }
+          
         </Container>
     )
 }
