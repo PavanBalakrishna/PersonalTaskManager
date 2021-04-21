@@ -1,15 +1,32 @@
 import React,{useEffect,useState} from 'react';
 import {TasksData} from '../../data/TasksData';
+import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem} from 'react-bootstrap';
 
 
 export default function TaskList({setShowTaskList , subgoal}) {
     const [taskListState, settaskListState] = useState([]);
+    const [showTaskEventListModal, setshowTaskEventListModal] = useState(false);
+    const [selectedTask, setselectedTask] = useState();
+    const [taskEventList, settaskEventList] = useState();
     useEffect(() => {
         
         settaskListState(TasksData.filter((t)=>{return t.SubGoal_ID === subgoal.id }))
        
     }, [subgoal])
+
+    const ShowTaskEventList=(selectedtask)=>{
+        fetch('./data/TaskEvents.json')
+        .then(resp => resp.json())
+        .then(taskdata => {
+            settaskEventList(taskdata.filter(te => te.Task_ID == selectedtask.id));
+            setselectedTask(selectedtask);
+            setshowTaskEventListModal(true);
+        });
+
+        
+    }
+
     return (
         <Container>
             <Row>
@@ -47,7 +64,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
                     <tbody>
                         {
                             taskListState.map((task)=>{
-                                return <tr key={task.id}>
+                                return <tr key={task.id} onClick={()=>{ShowTaskEventList(task)}}>
                                 {/* <td>{task.id}</td> */}
                                 <td>{task.Name}</td>
                                 <td>{task.Description}</td>
@@ -62,6 +79,12 @@ export default function TaskList({setShowTaskList , subgoal}) {
                     </Table>
                 </Col>
             </Row> 
+            {
+                showTaskEventListModal &&
+                <TaskEventList task={selectedTask} setshowTaskEventListModal={setshowTaskEventListModal} showTaskEventListModal={showTaskEventListModal} taskevents={taskEventList}>
+
+                </TaskEventList>
+            }
         </Container>
     )
 }
