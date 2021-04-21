@@ -24,7 +24,9 @@ export default function AddTask() {
     const [showAddTaskForm, setshowAddTaskForm] = useState(false);
 
     const [addTaskTime, setaddTaskTime] = useState();
-    const [addTaskDescription, setaddTaskDescription] = useState()
+    const [addTaskDescription, setaddTaskDescription] = useState();
+
+    const [currentTaskList, setcurrentTaskList] = useState()
 
     //Function to show add task modal
     const AddTaskButtonClick=()=>{
@@ -34,8 +36,25 @@ export default function AddTask() {
     }
 
     const AddTask=()=>{
+        fetch('./data/TaskEvents.json')
+        .then(resp => resp.json())
+        .then(taskdata => {
+            let taskeventid = taskdata.length+1;
+            let newtaskevent ={};
+            newtaskevent.id=taskeventid;
+            newtaskevent.Task_ID=selectedTask.id;
+            newtaskevent.TimeSpent=addTaskTime;
+            newtaskevent.StartTime=new Date().toUTCString();
+            newtaskevent.Description=addTaskDescription;
 
-        setshowAddTaskForm(false);
+            taskdata.push(newtaskevent);
+            
+            console.log(JSON.stringify(taskdata));
+            setshowAddTaskForm(false);
+            
+        });
+
+        
     }
 
     return (
