@@ -54,7 +54,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                                 </Col>
                                 <Col sm='4'>
                                     
-                                    <CustomPieChart chartData={subgoalchartData} color='#ffcc00'>
+                                    <CustomPieChart chartData={subgoalchartData} color='#009926'>
                                     </CustomPieChart>
                                 </Col>
                             </Row>
