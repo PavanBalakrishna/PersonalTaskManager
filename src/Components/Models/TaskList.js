@@ -43,7 +43,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
                         </Card.Text>
                         <ListGroup className="list-group-flush">
                             <ListGroupItem>Cycles : {subgoal.Cycles}</ListGroupItem>
-                            <ListGroupItem>Total Estimated time : {subgoal.Total}</ListGroupItem>
+                            <ListGroupItem>Total Estimated time : {subgoal.TotalTime}</ListGroupItem>
                             
                         </ListGroup>
                         

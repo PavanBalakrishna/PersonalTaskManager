@@ -27,7 +27,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
             sgChartData.push({name:sg.Name, value:sg.TotalTime})
         });
         setsubgoalchartData(sgChartData);
-        
+
         DataService.FetchMasterData().then((masterlist)=>{
             let filteredGoals =masterlist.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
             setSubGoalsState(filteredGoals);
@@ -83,8 +83,8 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                 {/* <th>ID</th> */}
                 <th>Name</th>
                 {/* <th>Description</th>
-                <th>Total Cycles</th>
-                <th>Total Estimated Time</th> */}
+                <th>Total Cycles</th>*/}
+                <th>Total Time</th> 
                 
                 </tr>
             </thead>
@@ -95,8 +95,8 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                         {/* <td>{subgoal.id}</td> */}
                         <td>{subgoal.Name}</td>
                         {/* <td>{subgoal.Description}</td>
-                        <td>{subgoal.Cycles}</td>
-                        <td>{subgoal.Total}</td> */}
+                        <td>{subgoal.Cycles}</td> */}
+                        <td>{subgoal.TotalTime}</td>
                         
                         </tr>
                         {
