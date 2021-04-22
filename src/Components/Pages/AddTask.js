@@ -3,14 +3,15 @@ import {GoalsData} from "../../data/GoalsData";
 import {SubGoalsData} from "../../data/SubGoalsData";
 import {TasksData} from "../../data/TasksData";
 import {Container,Row,Col,Card,Form,Button,Modal,ListGroup,ListGroupItem} from 'react-bootstrap';
-import FileService from '../../Services/FileService';
+import AddTaskModal from '../Models/AddTaskModal'
 
 export default function AddTask() {
     const [goalliststate, setgoalliststate] = useState(GoalsData);
     const [subgoalliststate, setsubgoalliststate] = useState();
     const [taskliststate, settaskliststate] = useState();
-
+    const [showButton, setshowButton] = useState(false);
     const [selectedGoal, setselectedGoal] = useState();
+    const [showAddTaskForm, setshowAddTaskForm] = useState(false);
     
     const [selectedSubGoal, setselectedSubGoal] = useState();
     const [showSubGoals, setshowSubGoals] = useState(false);
@@ -18,47 +19,15 @@ export default function AddTask() {
     const [selectedTask, setselectedTask] = useState();
     const [showTasks, setshowTasks] = useState(false);
 
-    const [addedTask, setaddedTask] = useState();
-
-    const [showButton, setshowButton] = useState(false);
-
-    const [showAddTaskForm, setshowAddTaskForm] = useState(false);
-
-    const [addTaskTime, setaddTaskTime] = useState();
-    const [addTaskDescription, setaddTaskDescription] = useState();
-
+    
     const [currentTaskList, setcurrentTaskList] = useState()
 
-    //Function to show add task modal
-    const AddTaskButtonClick=()=>{
+        //Function to show add task modal
+        const AddTaskButtonClick=()=>{
 
 
-        setshowAddTaskForm(true);
-    }
-
-    const AddTask=()=>{
-        fetch('./data/TaskEvents.json')
-        .then(resp => resp.json())
-        .then(taskdata => {
-            let taskeventid = taskdata.length+1;
-            let newtaskevent ={};
-            newtaskevent.id=taskeventid;
-            newtaskevent.Task_ID=selectedTask.id;
-            newtaskevent.TimeSpent=addTaskTime;
-            newtaskevent.StartTime=new Date().toUTCString();
-            newtaskevent.Description=addTaskDescription;
-
-            taskdata.push(newtaskevent);
-            
-            
-
-            FileService.SaveTaskEventsToAWS(taskdata);
-            setshowAddTaskForm(false);
-            
-        });
-
-        
-    }
+            setshowAddTaskForm(true);
+        }
 
     return (
         <Container fluid>
@@ -183,39 +152,8 @@ export default function AddTask() {
                 }
                 {
                     showAddTaskForm && 
+                    <AddTaskModal selectedTask={selectedTask} showAddTaskForm={showAddTaskForm} setshowAddTaskForm={setshowAddTaskForm}></AddTaskModal>
 
-                    <Modal show={showAddTaskForm} onHide={()=>{ setshowAddTaskForm(false)}}>
-                        <Modal.Header closeButton>
-                        <Modal.Title>{selectedTask.Name}</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <Card>
-                            <Card.Body>
-                                <Card.Text>
-                                    {selectedTask.Description}
-                                </Card.Text>
-                                    <ListGroup className="list-group-flush">
-                                        <ListGroupItem>Source : {selectedTask.Source}</ListGroupItem>
-                                        <ListGroupItem>TimePerCycle : {selectedTask.TimePerCycle}</ListGroupItem>
-                                    </ListGroup>
-                                    <Form.Group >
-                                        <Form.Label>Time Spent (Hours)</Form.Label>
-                                        <Form.Control type="number" placeholder="0" onChange={(e)=>{setaddTaskTime(e.target.value)}} />
-                                        <Form.Label>Activity Details</Form.Label>
-                                        <Form.Control as="textarea" placeholder="" onChange={(e)=>{setaddTaskDescription(e.target.value)}} />
-                                    </Form.Group>
-                                </Card.Body>
-                            </Card>
-                        </Modal.Body>
-                        <Modal.Footer>
-                        <Button variant="secondary" onClick={()=>{ setshowAddTaskForm(false) }}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={AddTask}>
-                            Add Task
-                        </Button>
-                        </Modal.Footer>
-                </Modal>
                 }
           
         </Container>

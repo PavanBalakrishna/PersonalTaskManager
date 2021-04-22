@@ -120,7 +120,7 @@ export const TasksData = [
       "SubGoal_ID": 12
     },
     {
-      "id": 17,
+      "id": 18,
       "Name": "Python Numpy",
       "Description": "Python Numpy",
       "Source": "Online",
@@ -128,7 +128,7 @@ export const TasksData = [
       "SubGoal_ID": 5
     },
     {
-      "id": 18,
+      "id": 19,
       "Name": "Pyspark SQL",
       "Description": "Pyspark SQL",
       "Source": "Online",
@@ -136,7 +136,7 @@ export const TasksData = [
       "SubGoal_ID": 5
     },
     {
-      "id": 19,
+      "id": 20,
       "Name": "Neural Net",
       "Description": "Neural Net",
       "Source": "Online",
@@ -144,7 +144,7 @@ export const TasksData = [
       "SubGoal_ID": 5
     },
     {
-      "id": 20,
+      "id": 21,
       "Name": "SQL Window functions",
       "Description": "SQL Window functions",
       "Source": "Online",
@@ -152,7 +152,7 @@ export const TasksData = [
       "SubGoal_ID": 5
     },
     {
-      "id": 21,
+      "id": 22,
       "Name": "Git",
       "Description": "Git",
       "Source": "Online",
@@ -160,7 +160,7 @@ export const TasksData = [
       "SubGoal_ID": 5
     },
     {
-      "id": 22,
+      "id": 23,
       "Name": "OOPS",
       "Description": "Object oriented programming",
       "Source": "Online",
