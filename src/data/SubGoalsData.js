@@ -4,7 +4,7 @@ export const SubGoalsData = [
       "Name": "Minna No Nihongo N5",
       "Description": "Revise minna no nihongo N5",
       "Cycles": 5,
-      "Total": 375,
+      "TotalTime": 375,
       "Goal_ID": 1
     },
     {
@@ -12,7 +12,7 @@ export const SubGoalsData = [
       "Name": "Genki N5",
       "Description": "Revise Genki N5",
       "Cycles": 5,
-      "Total": 187.5,
+      "TotalTime": 187.5,
       "Goal_ID": 1
     },
     {
@@ -20,7 +20,7 @@ export const SubGoalsData = [
       "Name": "Vocabulary",
       "Description": "Revise Vocabulary",
       "Cycles": 10,
-      "Total": 250,
+      "TotalTime": 250,
       "Goal_ID": 1
     },
     {
@@ -28,7 +28,7 @@ export const SubGoalsData = [
       "Name": "Machine Learning Youtube",
       "Description": "Machine Learning from Youtube",
       "Cycles": 1,
-      "Total": 130,
+      "TotalTime": 130,
       "Goal_ID": 2
     },
     {
@@ -36,7 +36,7 @@ export const SubGoalsData = [
       "Name": "Interview Prep",
       "Description": "Interview Prep",
       "Cycles": 1,
-      "Total": 400,
+      "TotalTime": 400,
       "Goal_ID": 2
     },
     {
@@ -44,7 +44,7 @@ export const SubGoalsData = [
       "Name": "Python Prep - Krish Nair",
       "Description": "Python Prep - Krish Nair from youtube",
       "Cycles": 1,
-      "Total": 50,
+      "TotalTime": 50,
       "Goal_ID": 2
     },
     {
@@ -52,7 +52,7 @@ export const SubGoalsData = [
       "Name": "Tablue",
       "Description": "Study tablue Course certification",
       "Cycles": 1,
-      "Total": 80,
+      "TotalTime": 80,
       "Goal_ID": 2
     },
     {
@@ -60,7 +60,7 @@ export const SubGoalsData = [
       "Name": "Ineuron course",
       "Description": "Ineuron course attend classes",
       "Cycles": 1,
-      "Total": 550,
+      "TotalTime": 550,
       "Goal_ID": 3
     },
     {
@@ -68,7 +68,7 @@ export const SubGoalsData = [
       "Name": "Fitness",
       "Description": "Fitness",
       "Cycles": 1,
-      "Total": 1600,
+      "TotalTime": 1600,
       "Goal_ID": 4
     },
 
@@ -77,7 +77,7 @@ export const SubGoalsData = [
       "Name": "Financial Planning",
       "Description": "Financial Planning for family",
       "Cycles": 1,
-      "Total": 170,
+      "TotalTime": 170,
       "Goal_ID": 5
     },
     {
@@ -85,7 +85,7 @@ export const SubGoalsData = [
       "Name": "Reading Study",
       "Description": "Book reading",
       "Cycles": 5,
-      "Total": 500,
+      "TotalTime": 500,
       "Goal_ID": 6
     },
     {
@@ -93,7 +93,7 @@ export const SubGoalsData = [
         "Name": "Reading Personal",
         "Description": "Book reading Personal",
         "Cycles": 5,
-        "Total": 1480,
+        "TotalTime": 1480,
         "Goal_ID": 6
       }
   ]

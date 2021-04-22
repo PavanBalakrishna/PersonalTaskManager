@@ -3,7 +3,7 @@ import {GoalsData} from '../../data/GoalsData'
 import {SubGoalsData} from '../../data/SubGoalsData'
 import {TasksData} from '../../data/TasksData'
 import {Container,Row,Col,Table,Card,ProgressBar} from 'react-bootstrap';
-import FileService from '../../Services/FileService';
+import {FileService} from '../../Services/Utilities';
 
 
 export default function GoalsList({ClickGoal}) {
@@ -23,7 +23,7 @@ export default function GoalsList({ClickGoal}) {
             let sglist = SubGoalsData.filter(sg => sg.Goal_ID == g.id);
             sglist.forEach(sg=>{
                 //Adding total time
-                pglist.TotalTime += sg.Total;
+                pglist.TotalTime += sg.TotalTime;
 
                 let ltsklist = TasksData.filter(t => t.SubGoal_ID == sg.id);
 
@@ -108,7 +108,7 @@ export default function GoalsList({ClickGoal}) {
                             
 
                             return (<>
-                            <tr key={goal.id} onClick={()=> {ClickGoal(goal)}}>
+                            <tr className='click-tr' key={goal.id} onClick={()=> {ClickGoal(goal)}}>
                             {/* <td>{goal.id}</td> */}
                             <td>{goal.Name}</td>
                             <td>{goal.Description}</td>
@@ -119,7 +119,7 @@ export default function GoalsList({ClickGoal}) {
                             {
                                     showProgressBar &&
                             
-                                    <tr>
+                                    <tr className='click-tr' onClick={()=> {ClickGoal(goal)}}>
                                         <td>
                                             <ProgressBar now={goal.Percent} label={goal.Percent}></ProgressBar>
                                         </td>

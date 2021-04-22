@@ -1,11 +1,15 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import {GoalsData} from "../../data/GoalsData";
 import {SubGoalsData} from "../../data/SubGoalsData";
 import {TasksData} from "../../data/TasksData";
 import {Container,Row,Col,Card,Form,Button,Modal,ListGroup,ListGroupItem} from 'react-bootstrap';
 import AddTaskModal from '../Models/AddTaskModal'
+import {DataService} from '../../Services/Utilities'
 
 export default function AddTask() {
+    useEffect(()=>{
+        DataService.FetchMasterData();
+    },[])
     const [goalliststate, setgoalliststate] = useState(GoalsData);
     const [subgoalliststate, setsubgoalliststate] = useState();
     const [taskliststate, settaskliststate] = useState();

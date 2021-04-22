@@ -2,7 +2,7 @@ import React,{useEffect,useState} from 'react';
 import {TasksData} from '../../data/TasksData';
 import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem} from 'react-bootstrap';
-import FileService from '../../Services/FileService';
+import {FileService} from '../../Services/Utilities';
 
 
 export default function TaskList({setShowTaskList , subgoal}) {

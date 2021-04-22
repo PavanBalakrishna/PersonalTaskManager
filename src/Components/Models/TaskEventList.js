@@ -31,7 +31,7 @@ export default function TaskEventList({task,setshowTaskEventListModal,showTaskEv
                     <tbody>
                         {
                             taskevents.map((taskevent)=>{
-                                return <tr key={taskevent.id} >
+                                return <tr className='click-tr' key={taskevent.id} >
                                 {/* <td>{task.id}</td> */}
                                 <td>{taskevent.StartTime}</td>
                                 <td>{taskevent.TimeSpent}</td>

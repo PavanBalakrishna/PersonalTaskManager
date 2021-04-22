@@ -21,7 +21,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
 
         let sgChartData=[];
         filteredGoals.forEach(sg => {
-            sgChartData.push({name:sg.Name, value:sg.Total})
+            sgChartData.push({name:sg.Name, value:sg.TotalTime})
         });
         setsubgoalchartData(sgChartData);
 
@@ -81,7 +81,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
             <tbody>
                 {
                     SubGoalsState.map((subgoal)=>{
-                        return <><tr key={subgoal.id} onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
+                        return <><tr className='click-tr' key={subgoal.id} onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
                         {/* <td>{subgoal.id}</td> */}
                         <td>{subgoal.Name}</td>
                         {/* <td>{subgoal.Description}</td>

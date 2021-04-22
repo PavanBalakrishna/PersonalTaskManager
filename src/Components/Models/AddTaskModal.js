@@ -1,15 +1,9 @@
 import React,{useState} from 'react'
 import {Card,Form,Button,Modal,ListGroup,ListGroupItem,Alert} from 'react-bootstrap';
-import FileService from '../../Services/FileService';
+import {FileService} from '../../Services/Utilities';
 
 
 export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddTaskForm}) {
-    const [addedTask, setaddedTask] = useState();
-
-    
-
-    
-
     const [addTaskTime, setaddTaskTime] = useState();
     const [addTaskDescription, setaddTaskDescription] = useState();
     const [showSuccess, setshowSuccess] = useState(false);
