@@ -7,9 +7,7 @@ import AddTaskModal from '../Models/AddTaskModal'
 import {DataService} from '../../Services/Utilities'
 
 export default function AddTask() {
-    useEffect(()=>{
-        DataService.FetchMasterData();
-    },[])
+    
     const [goalliststate, setgoalliststate] = useState(GoalsData);
     const [subgoalliststate, setsubgoalliststate] = useState();
     const [taskliststate, settaskliststate] = useState();
@@ -22,9 +20,6 @@ export default function AddTask() {
 
     const [selectedTask, setselectedTask] = useState();
     const [showTasks, setshowTasks] = useState(false);
-
-    
-    const [currentTaskList, setcurrentTaskList] = useState()
 
         //Function to show add task modal
         const AddTaskButtonClick=()=>{

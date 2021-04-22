@@ -1,21 +1,24 @@
 import React,{useEffect,useState} from 'react'
 import {SubGoalsData} from '../../data/SubGoalsData'
-import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
+import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse,ProgressBar} from 'react-bootstrap';
 import TaskList from './TaskList'
 import CustomPieChart from '../Charts/CustomPieChart';
+import {DataService} from '../../Services/Utilities';
 
 export default function SubGoalsList({setShowGoalsList , goal}) {
     const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();
+    const [showProgressBar, setshowProgressBar] = useState(false)
     const ShowTasks=(subgoal)=>{
         setselectedsubgoal(subgoal);
         setShowTasks(true);
         
     } 
 
-    useEffect(() => {
+    useEffect(async () => {
+
         let filteredGoals =SubGoalsData.filter((sg)=>{return sg.Goal_ID===goal.id});
         setSubGoalsState(filteredGoals);
 
@@ -24,6 +27,13 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
             sgChartData.push({name:sg.Name, value:sg.TotalTime})
         });
         setsubgoalchartData(sgChartData);
+        
+        DataService.FetchMasterData().then((masterlist)=>{
+            let filteredGoals =masterlist.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
+            setSubGoalsState(filteredGoals);
+            setshowProgressBar(true);
+        })
+
 
     }, [goal])
     
@@ -89,6 +99,15 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                         <td>{subgoal.Total}</td> */}
                         
                         </tr>
+                        {
+                            showProgressBar &&
+                            
+                            <tr className='click-tr' onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
+                                <td>
+                                    <ProgressBar now={subgoal.Percentage} label={subgoal.Percentage}></ProgressBar>
+                                </td>
+                            </tr>
+                        }
                        </>
                     })
                 }

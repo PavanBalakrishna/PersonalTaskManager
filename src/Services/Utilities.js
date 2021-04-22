@@ -20,7 +20,7 @@ const GetMasterData = taskeventsdata => {
                     Percentage:0
                 };
                 
-                let sglist = SubGoalsData.filter(sg => sg.Goal_ID == g.id);
+                let sglist = SubGoalsData.filter(sg => sg.Goal_ID === g.id);
                 sglist.forEach(sg=>{
                     let mainSubGoal ={
                         ...sg,
@@ -31,7 +31,7 @@ const GetMasterData = taskeventsdata => {
                     //Adding total time
                     mainGoal.TotalTime += sg.TotalTime;
 
-                    let ltsklist = TasksData.filter(t => t.SubGoal_ID == sg.id);
+                    let ltsklist = TasksData.filter(t => t.SubGoal_ID === sg.id);
 
                     ltsklist.forEach(t=>{
                         let mainTask ={
@@ -40,7 +40,7 @@ const GetMasterData = taskeventsdata => {
                             TotalTimeSpent:0,
                             SubGoal_ID:mainSubGoal.id
                         }
-                        let gsgtelist = taskeventsdata.filter(te=> te.Task_ID == t.id);
+                        let gsgtelist = taskeventsdata.filter(te=> te.Task_ID === t.id);
 
                         gsgtelist.forEach(lte=>{
                             
@@ -109,21 +109,26 @@ export const FileService ={
                  ResponseContentType: 'application/javascript'
             };
             
-            return s3.getObject(params,(err, responseData)=>{
+            let promiseData = await s3.getObject(params,(err, responseData)=>{
                     if (err) console.log(err, err.stack); // an error occurred
                     else   {
-                        var uint8array = new TextEncoder().encode(responseData.Body);
+                        let uint8array = new TextEncoder().encode(responseData.Body);
                         let resultbody = new TextDecoder().decode(uint8array);
-                        callbackFunction(JSON.parse(resultbody),err);
+                        if(callbackFunction != null){
+                            callbackFunction(JSON.parse(resultbody),err);
+                        }
+                        
                     } 
-                 });
-
-                 
+                 }).promise();
+                 let uint8array = new TextEncoder().encode(promiseData.Body);
+                 let resultbody = new TextDecoder().decode(uint8array);
+                 return JSON.parse(resultbody);
             }
 }
 
 export const DataService = {
-    FetchMasterData : ()=>{
-        FileService.GetListFromAWS("data/TaskEvents.json",GetMasterData)
+    FetchMasterData : async ()=>{
+       let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
+       return GetMasterData(promiseData);
     }
 }

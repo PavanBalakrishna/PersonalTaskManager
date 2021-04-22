@@ -3,74 +3,26 @@ import {GoalsData} from '../../data/GoalsData'
 import {SubGoalsData} from '../../data/SubGoalsData'
 import {TasksData} from '../../data/TasksData'
 import {Container,Row,Col,Table,Card,ProgressBar} from 'react-bootstrap';
-import {FileService} from '../../Services/Utilities';
+import {DataService} from '../../Services/Utilities';
 
 
 export default function GoalsList({ClickGoal}) {
 
-    //Function to update progress data
-   const  UpdateProgressData = taskeventsdata => {
-        let progressGoalList = [];
-
-        GoalsData.forEach(g => {
-            let pglist = {
-                id:g.id,
-                TotalTime:0,
-                TotalTimeSpent:0,
-                Percent:0
-            }
-            let tasklist=[]
-            let sglist = SubGoalsData.filter(sg => sg.Goal_ID == g.id);
-            sglist.forEach(sg=>{
-                //Adding total time
-                pglist.TotalTime += sg.TotalTime;
-
-                let ltsklist = TasksData.filter(t => t.SubGoal_ID == sg.id);
-
-                ltsklist.forEach(t=>{
-                    let gsgtelist = taskeventsdata.filter(te=> te.Task_ID == t.id);
-
-                    gsgtelist.forEach(lte=>{
-                        pglist.TotalTimeSpent += parseFloat(lte.TimeSpent);
-                    })
-                })
-                
-                
-            })
-            pglist.Percent = parseInt((pglist.TotalTimeSpent*100)/pglist.TotalTime);
-            progressGoalList.push(pglist);
-        });
-        setprogressDataState(progressGoalList);
-    };
     const GetGoalProgress = ()=>{
-        
-        FileService.GetListFromAWS("data/TaskEvents.json",UpdateProgressData)
-        
+        DataService.FetchMasterData().then((masterdata)=>{
+            setgoallistState(masterdata.GoalsList);
+            setshowProgressBar(true);
+        });
         
     }
 
-    const [progressDataState, setprogressDataState] = useState(GetGoalProgress());
+    const [progressDataState, setprogressDataState] = useState();
     const [goallistState, setgoallistState] = useState(GoalsData);
     const [showProgressBar, setshowProgressBar] = useState(false);
 
     useEffect(()=>{
-        
-        if(progressDataState != null){
-            let goalsDataWithProgress =[];
-            progressDataState.forEach(te=>{
-                goallistState.filter(g=>{
-                    if(te.id == g.id){
-                        let combinedgoal = {...g,...te};
-                        goalsDataWithProgress.push(combinedgoal);
-                    }
-                })
-            })
-
-            setgoallistState(goalsDataWithProgress)
-            setshowProgressBar(true);
-        }
-        
-    },[progressDataState])
+        GetGoalProgress();
+    },[])
     
     
     
@@ -121,7 +73,7 @@ export default function GoalsList({ClickGoal}) {
                             
                                     <tr className='click-tr' onClick={()=> {ClickGoal(goal)}}>
                                         <td>
-                                            <ProgressBar now={goal.Percent} label={goal.Percent}></ProgressBar>
+                                            <ProgressBar now={goal.Percentage} label={goal.Percentage}></ProgressBar>
                                         </td>
                                     </tr>
         
