@@ -4,13 +4,25 @@ import {TasksData} from '../data/TasksData'
 var AWS = require('aws-sdk');
 var config = require('../config.json');
 
-const GetMasterData = taskeventsdata => {
+const GetMasterData = (taskeventsdata,startDate, endDate) => {
      let masterList = {
         GoalsList:[],
         SubGoalsList:[],
         TasksList:[],
         TaskEventsList:[]
     };
+
+        if(startDate != null && startDate != ''){
+            taskeventsdata = taskeventsdata.filter(te=>{
+                return new Date(te.StartTime) >= new Date(startDate);
+            })
+        }
+
+        if(endDate != null && endDate != ''){
+            taskeventsdata = taskeventsdata.filter(te=>{
+                return new Date(te.StartTime) <= new Date(endDate);
+            })
+        }
 
         GoalsData.forEach(g => {
                 let mainGoal = {
@@ -127,8 +139,8 @@ export const FileService ={
 }
 
 export const DataService = {
-    FetchMasterData : async ()=>{
+    FetchMasterData : async (startDate, endDAte)=>{
        let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
-       return GetMasterData(promiseData);
+       return GetMasterData(promiseData, startDate, endDAte);
     }
 }

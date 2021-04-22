@@ -54,8 +54,6 @@ export default function GoalsList({ClickGoal}) {
                 <tbody>
                     {
                         goallistState.map((goal)=>{
-                            let progressvalue = 100;
-                            
 
                             return (<>
                             <tr className='click-tr' key={goal.id} onClick={()=> {ClickGoal(goal)}}>
