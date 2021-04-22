@@ -7,8 +7,9 @@ import {
 } from "react-router-dom";
 import Header from './Components/Static/Header'
 import Footer from './Components/Static/Footer'
-import Home from './Components/Pages/Home'
+import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
+import Reports from './Components/Pages/Reports'
 
 
 
@@ -24,11 +25,15 @@ function App() {
     </Row>
     <Row>
     <Switch>
-          <Route path="/List">
-            <Home />
+        
+          <Route path="/AddTask">
+            <AddTask />
+          </Route>
+          <Route path="/Reports">
+            <Reports />
           </Route>
           <Route path="/">
-            <AddTask />
+            <List />
           </Route>
         </Switch>
     </Row>

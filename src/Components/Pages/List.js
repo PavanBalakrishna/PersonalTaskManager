@@ -4,7 +4,7 @@ import SubGoalsList from '../Models/SubGoalsList'
 import {Container} from 'react-bootstrap'
 
 
-export default function Home() {
+export default function List() {
   const [showGoalsList, setShowGoalsList] = useState(true);
     const [currentGoal, setcurrentGoal] = useState();
     const ClickGoal=(goal)=>{

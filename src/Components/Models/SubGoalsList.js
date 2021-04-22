@@ -64,7 +64,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                                 </Col>
                                 <Col sm='4'>
                                     
-                                    <CustomPieChart chartData={subgoalchartData} color='#009926'>
+                                    <CustomPieChart chartData={subgoalchartData} color='#ac39ac'>
                                     </CustomPieChart>
                                 </Col>
                             </Row>
@@ -104,7 +104,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                             
                             <tr className='click-tr' onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
                                 <td>
-                                    <ProgressBar now={subgoal.Percentage} label={subgoal.Percentage}></ProgressBar>
+                                    <ProgressBar animated now={subgoal.Percentage} label={subgoal.Percentage}></ProgressBar>
                                 </td>
                             </tr>
                         }

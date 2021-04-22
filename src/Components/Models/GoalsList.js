@@ -1,7 +1,5 @@
 import React,{useState,useEffect} from 'react'
 import {GoalsData} from '../../data/GoalsData'
-import {SubGoalsData} from '../../data/SubGoalsData'
-import {TasksData} from '../../data/TasksData'
 import {Container,Row,Col,Table,Card,ProgressBar} from 'react-bootstrap';
 import {DataService} from '../../Services/Utilities';
 
@@ -73,7 +71,7 @@ export default function GoalsList({ClickGoal}) {
                             
                                     <tr className='click-tr' onClick={()=> {ClickGoal(goal)}}>
                                         <td>
-                                            <ProgressBar now={goal.Percentage} label={goal.Percentage}></ProgressBar>
+                                            <ProgressBar animated now={goal.Percentage} label={goal.Percentage}></ProgressBar>
                                         </td>
                                     </tr>
         
