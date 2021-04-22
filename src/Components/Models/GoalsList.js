@@ -3,46 +3,50 @@ import {GoalsData} from '../../data/GoalsData'
 import {SubGoalsData} from '../../data/SubGoalsData'
 import {TasksData} from '../../data/TasksData'
 import {Container,Row,Col,Table,Card,ProgressBar} from 'react-bootstrap';
+import FileService from '../../Services/FileService';
 
 
 export default function GoalsList({ClickGoal}) {
 
-    const GetGoalProgress = ()=>{
-        fetch('./data/TaskEvents.json')
-        .then(resp => resp.json())
-        .then(taskeventsdata => {
-            let progressGoalList = [];
+    //Function to update progress data
+   const  UpdateProgressData = taskeventsdata => {
+        let progressGoalList = [];
 
-            GoalsData.forEach(g => {
-                let pglist = {
-                    id:g.id,
-                    TotalTime:0,
-                    TotalTimeSpent:0,
-                    Percent:0
-                }
-                let tasklist=[]
-                let sglist = SubGoalsData.filter(sg => sg.Goal_ID == g.id);
-                sglist.forEach(sg=>{
-                    //Adding total time
-                    pglist.TotalTime += sg.Total;
+        GoalsData.forEach(g => {
+            let pglist = {
+                id:g.id,
+                TotalTime:0,
+                TotalTimeSpent:0,
+                Percent:0
+            }
+            let tasklist=[]
+            let sglist = SubGoalsData.filter(sg => sg.Goal_ID == g.id);
+            sglist.forEach(sg=>{
+                //Adding total time
+                pglist.TotalTime += sg.Total;
 
-                    let ltsklist = TasksData.filter(t => t.SubGoal_ID == sg.id);
+                let ltsklist = TasksData.filter(t => t.SubGoal_ID == sg.id);
 
-                    ltsklist.forEach(t=>{
-                        let gsgtelist = taskeventsdata.filter(te=> te.Task_ID == t.id);
+                ltsklist.forEach(t=>{
+                    let gsgtelist = taskeventsdata.filter(te=> te.Task_ID == t.id);
 
-                        gsgtelist.forEach(lte=>{
-                            pglist.TotalTimeSpent += parseFloat(lte.TimeSpent);
-                        })
+                    gsgtelist.forEach(lte=>{
+                        pglist.TotalTimeSpent += parseFloat(lte.TimeSpent);
                     })
-                    
-                    
                 })
-                pglist.Percent = parseInt((pglist.TotalTimeSpent*100)/pglist.TotalTime);
-                progressGoalList.push(pglist);
-            });
-            setprogressDataState(progressGoalList);
+                
+                
+            })
+            pglist.Percent = parseInt((pglist.TotalTimeSpent*100)/pglist.TotalTime);
+            progressGoalList.push(pglist);
         });
+        setprogressDataState(progressGoalList);
+    };
+    const GetGoalProgress = ()=>{
+        
+        FileService.GetListFromAWS("data/TaskEvents.json",UpdateProgressData)
+        
+        
     }
 
     const [progressDataState, setprogressDataState] = useState(GetGoalProgress());

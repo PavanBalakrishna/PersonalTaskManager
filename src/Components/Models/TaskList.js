@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react';
 import {TasksData} from '../../data/TasksData';
 import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem} from 'react-bootstrap';
+import FileService from '../../Services/FileService';
 
 
 export default function TaskList({setShowTaskList , subgoal}) {
@@ -15,14 +16,16 @@ export default function TaskList({setShowTaskList , subgoal}) {
        
     }, [subgoal])
 
+    const GetTaskEvents =(taskdata,localselectedTask) => {
+        settaskEventList(taskdata.filter(te => te.Task_ID == localselectedTask.id));
+        setselectedTask(localselectedTask);
+        setshowTaskEventListModal(true);
+    };
+
     const ShowTaskEventList=(selectedtask)=>{
-        fetch('./data/TaskEvents.json')
-        .then(resp => resp.json())
-        .then(taskdata => {
-            settaskEventList(taskdata.filter(te => te.Task_ID == selectedtask.id));
-            setselectedTask(selectedtask);
-            setshowTaskEventListModal(true);
-        });
+        FileService.GetListFromAWS("data/TaskEvents.json",(response)=>{GetTaskEvents(response,selectedtask)});
+        
+       
 
         
     }
