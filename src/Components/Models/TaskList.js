@@ -1,8 +1,9 @@
 import React,{useEffect,useState} from 'react';
 import {TasksData} from '../../data/TasksData';
 import TaskEventList from './TaskEventList';
-import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem} from 'react-bootstrap';
+import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem,Button} from 'react-bootstrap';
 import {FileService} from '../../Services/Utilities';
+import AddTaskModal from '../Models/AddTaskModal'
 
 
 export default function TaskList({setShowTaskList , subgoal}) {
@@ -10,6 +11,9 @@ export default function TaskList({setShowTaskList , subgoal}) {
     const [showTaskEventListModal, setshowTaskEventListModal] = useState(false);
     const [selectedTask, setselectedTask] = useState();
     const [taskEventList, settaskEventList] = useState();
+    const [showAddTaskForm, setshowAddTaskForm] = useState(false);
+
+        
     useEffect(() => {
         
         settaskListState(TasksData.filter((t)=>{return t.SubGoal_ID === subgoal.id }))
@@ -22,6 +26,12 @@ export default function TaskList({setShowTaskList , subgoal}) {
         setshowTaskEventListModal(true);
     };
 
+      //Function to show add task modal
+      const AddTaskButtonClick=(localselectedTask)=>{
+
+        setselectedTask(localselectedTask);
+        setshowAddTaskForm(true);
+    }
     const ShowTaskEventList=(selectedtask)=>{
         FileService.GetListFromAWS("data/TaskEvents.json",(response)=>{GetTaskEvents(response,selectedtask)});
         
@@ -67,13 +77,14 @@ export default function TaskList({setShowTaskList , subgoal}) {
                     <tbody>
                         {
                             taskListState.map((task)=>{
-                                return <tr key={task.id} onClick={()=>{ShowTaskEventList(task)}}>
+                                return <tr key={task.id} >
                                 {/* <td>{task.id}</td> */}
                                 <td>{task.Name}</td>
                                 <td>{task.Description}</td>
                                 <td>{task.Source}</td>
                                 <td>{task.TimePerCycle}</td>
-                                
+                                <td><Button variant='info' onClick={()=>{ShowTaskEventList(task)}}>View Events</Button></td>
+                                <td><Button variant='success' onClick={() => { AddTaskButtonClick(task) }}>Add Task Event</Button></td>
                                 </tr>
                             
                             })
@@ -87,6 +98,10 @@ export default function TaskList({setShowTaskList , subgoal}) {
                 <TaskEventList task={selectedTask} setshowTaskEventListModal={setshowTaskEventListModal} showTaskEventListModal={showTaskEventListModal} taskevents={taskEventList}>
 
                 </TaskEventList>
+            }
+            {
+                showAddTaskForm && 
+                <AddTaskModal selectedTask={selectedTask} showAddTaskForm={showAddTaskForm} setshowAddTaskForm={setshowAddTaskForm}></AddTaskModal>
             }
         </Container>
     )
