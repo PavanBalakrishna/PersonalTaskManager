@@ -1,6 +1,4 @@
-import React,{useState} from 'react'
-
-import {TasksData} from "../../data/TasksData";
+import React from 'react'
 import {Container,Row,Col,Table,Modal} from 'react-bootstrap';
 
 

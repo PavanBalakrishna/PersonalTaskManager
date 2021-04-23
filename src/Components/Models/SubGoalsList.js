@@ -1,10 +1,9 @@
 import React,{useEffect,useState} from 'react'
 import {SubGoalsData} from '../../data/SubGoalsData'
-import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse,ProgressBar} from 'react-bootstrap';
+import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
 import TaskList from './TaskList'
 import CustomPieChart from '../CustomFIelds/CustomPieChart';
 import {DataService} from '../../Services/Utilities';
-import ReportsBar from './ReportsBar';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 
 export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
@@ -22,7 +21,7 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
 
     useEffect(async () => {
 
-        let filteredGoals =SubGoalsData.filter((sg)=>{return sg.Goal_ID===goal.id});
+        let filteredGoals =SubGoalsState.filter((sg)=>{return sg.Goal_ID===goal.id});
         setSubGoalsState(filteredGoals);
 
         let sgChartData=[];

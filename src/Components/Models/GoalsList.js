@@ -1,6 +1,6 @@
 import React,{useState,useEffect} from 'react'
 import {GoalsData} from '../../data/GoalsData'
-import {Container,Row,Col,Table,Card,ProgressBar,OverlayTrigger,Tooltip} from 'react-bootstrap';
+import {Container,Row,Col,Table,Card} from 'react-bootstrap';
 import {DataService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 
@@ -16,7 +16,6 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
         
     }
 
-    const [progressDataState, setprogressDataState] = useState();
     const [goallistState, setgoallistState] = useState(GoalsData);
     const [showProgressBar, setshowProgressBar] = useState(false);
     
