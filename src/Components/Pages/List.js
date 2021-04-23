@@ -4,7 +4,7 @@ import SubGoalsList from '../Models/SubGoalsList'
 import {Container} from 'react-bootstrap'
 
 
-export default function List() {
+export default function List({startDateState, endDateState,setstartDateState, setendDateState}) {
   const [showGoalsList, setShowGoalsList] = useState(true);
     const [currentGoal, setcurrentGoal] = useState();
     const ClickGoal=(goal)=>{
@@ -14,13 +14,13 @@ export default function List() {
     if(showGoalsList){
       return (
         <Container fluid>
-          <GoalsList ClickGoal={ClickGoal}></GoalsList>
+          <GoalsList ClickGoal={ClickGoal} startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState}></GoalsList>
         </Container>
       )
     }else{
       return (
         <Container fluid>
-          <SubGoalsList setShowGoalsList={setShowGoalsList} goal={currentGoal}></SubGoalsList>
+          <SubGoalsList setShowGoalsList={setShowGoalsList} goal={currentGoal} startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState}></SubGoalsList>
       </Container>
       )
     }

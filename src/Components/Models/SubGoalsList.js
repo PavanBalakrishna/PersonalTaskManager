@@ -2,15 +2,18 @@ import React,{useEffect,useState} from 'react'
 import {SubGoalsData} from '../../data/SubGoalsData'
 import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse,ProgressBar} from 'react-bootstrap';
 import TaskList from './TaskList'
-import CustomPieChart from '../Charts/CustomPieChart';
+import CustomPieChart from '../CustomFIelds/CustomPieChart';
 import {DataService} from '../../Services/Utilities';
+import ReportsBar from './ReportsBar';
+import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 
-export default function SubGoalsList({setShowGoalsList , goal}) {
+export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
     const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();
-    const [showProgressBar, setshowProgressBar] = useState(false)
+    const [showProgressBar, setshowProgressBar] = useState(false);
+    
     const ShowTasks=(subgoal)=>{
         setselectedsubgoal(subgoal);
         setShowTasks(true);
@@ -28,14 +31,14 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
         });
         setsubgoalchartData(sgChartData);
 
-        DataService.FetchMasterData().then((masterlist)=>{
+        DataService.FetchMasterData(startDateState, endDateState).then((masterlist)=>{
             let filteredGoals =masterlist.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
             setSubGoalsState(filteredGoals);
             setshowProgressBar(true);
         })
 
 
-    }, [goal])
+    }, [goal,startDateState,endDateState])
     
     const BackToGoalList= ()=>{
         setShowGoalsList(true);
@@ -54,7 +57,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                         </Card.Text>
                         <Container fluid>
                             <Row>
-                                <Col sm='6'>
+                                <Col sm='4'>
                                 <ListGroup className="list-group-flush">
                                     <ListGroupItem>Category : {goal.Category}</ListGroupItem>
                                     <ListGroupItem>Start date : {new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</ListGroupItem>
@@ -62,6 +65,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                                 </ListGroup>
                                 <Button variant="danger" onClick={BackToGoalList} >Go back</Button>
                                 </Col>
+                             
                                 <Col sm='4'>
                                     
                                     <CustomPieChart chartData={subgoalchartData} color='#ac39ac'>
@@ -104,7 +108,7 @@ export default function SubGoalsList({setShowGoalsList , goal}) {
                             
                             <tr className='click-tr' onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
                                 <td>
-                                    <ProgressBar animated now={subgoal.Percentage} label={subgoal.Percentage}></ProgressBar>
+                                    <CustomProgressBar goal={subgoal}></CustomProgressBar>
                                 </td>
                             </tr>
                         }

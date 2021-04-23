@@ -1,3 +1,4 @@
+import React,{useState} from 'react'
 import {Container,Row,Col} from 'react-bootstrap';
 
 import {
@@ -9,18 +10,19 @@ import Header from './Components/Static/Header'
 import Footer from './Components/Static/Footer'
 import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
-import Reports from './Components/Pages/Reports'
+
 
 
 
 function App() {
+  const [startDateState, setstartDateState] = useState();
+  const [endDateState, setendDateState] = useState();
   return (
     <Router>
     <Container fluid>
     <Row>
       <Col>
-        <Header>
-        </Header>
+        <Header  startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
       </Col>
     </Row>
     <Row>
@@ -29,11 +31,9 @@ function App() {
           <Route path="/AddTask">
             <AddTask />
           </Route>
-          <Route path="/Reports">
-            <Reports />
-          </Route>
+          
           <Route path="/">
-            <List />
+            <List startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
           </Route>
         </Switch>
     </Row>
