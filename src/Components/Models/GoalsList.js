@@ -70,7 +70,7 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
                             {
                                     showProgressBar &&
                             
-                                    <tr className='click-tr' onClick={()=> {ClickGoal(goal)}}>
+                                    <tr className='click-tr'>
                                         <td>
                                             <CustomProgressBar goal={goal}></CustomProgressBar>
                                         </td>
