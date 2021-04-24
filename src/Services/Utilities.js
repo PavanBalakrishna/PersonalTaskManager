@@ -75,8 +75,10 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
                     masterList.SubGoalsList.push(mainSubGoal);
 
                 })
+                if(mainGoal.TotalTime != 0){
+                    mainGoal.Percentage = parseInt((mainGoal.TotalTimeSpent*100)/mainGoal.TotalTime);
+                }
                 
-                mainGoal.Percentage = parseInt((mainGoal.TotalTimeSpent*100)/mainGoal.TotalTime);
                 masterList.GoalsList.push(mainGoal);
             });
 
