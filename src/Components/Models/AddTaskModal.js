@@ -15,16 +15,7 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         setshowAddTaskForm(false);
     }
 
-    const SaveTaskCallBackFunction = (data,err)=>{
-        if(err != null){
-            setshowError(true);
-            setshowSuccess(false);
-        }else{
-            setshowError(false);
-            setshowSuccess(true);
-        }
-    }
-
+    
     const AddTaskToTaskList = (taskdata,err) => {
         if(err != null){
             console.log(err);
@@ -41,7 +32,17 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         
         
 
-            FileService.SaveListToAWS("data/TaskEvents.json",taskdata,SaveTaskCallBackFunction);
+            FileService.SaveDataToAWS("data/TaskEvents.json",taskdata, (data,err)=>{
+                if(err != null){
+                    setshowError(true);
+                    setshowSuccess(false);
+                }else{
+                    window.MasterTasksData = [...window.MasterTasksData, taskdata]
+                    setshowError(false);
+                    setshowSuccess(true);
+                }
+            }
+        );
             
         }
         

@@ -2,15 +2,15 @@ import React,{useState,useEffect,useContext} from 'react'
 import {Container,Row,Col,Button,Card,ListGroup,ListGroupItem,Form,Alert} from 'react-bootstrap';
 import {FileService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
-import {GoalsContext,SubGoalsContext,TasksContext} from '../../CustomContextProvider'
+//import {GoalsContext,SubGoalsContext,TasksContext} from '../../CustomContextProvider'
 
 export default function AddData() {
     const [showGoal, setshowGoal] = useState(false);
     const [showSubGoal, setshowSubGoal] = useState(false);
     const [showTask, setshowTask] = useState(false);
-    const [goalliststate, setgoalliststate] = useState(useContext(GoalsContext));
-    const [subgoalliststate, setsubgoalliststate] = useState(useContext(SubGoalsContext));
-    const [taskliststate, settaskliststate] = useState(useContext(TasksContext));
+    const [goalliststate, setgoalliststate] = useState(window.MasterGoalsData);
+    const [subgoalliststate, setsubgoalliststate] = useState(window.MasterSubGoalsData);
+    const [taskliststate, settaskliststate] = useState(window.MasterTasksData);
         
     
     
@@ -41,9 +41,15 @@ export default function AddData() {
 
     
     const AddGoal = ()=>{
-        addedGoal.id = goalliststate.length;
-        FileService.SaveTaskEventsToAWS('data/Goals.json',[...goalliststate,addedGoal]);
-        setgoalAddedSuccessfully(true);
+        addedGoal.id = goalliststate.length + 1;
+        FileService.SaveDataToAWS('data/Goals.json',[...goalliststate,addedGoal],(response, err)=>{
+            if(response != null){
+                window.MasterGoalsData = [...window.MasterGoalsData, addedGoal];
+                setgoalliststate(window.MasterGoalsData);
+                setgoalAddedSuccessfully(true);
+            }
+        });
+        
       }
 
       const showAddSubGoalSetion = ()=>{
@@ -59,9 +65,16 @@ export default function AddData() {
 
     
     const AddSubGoal = ()=>{
-        var sgAdd = {...addedSubGoal,id:subgoalliststate.length,Goal_ID:selectedSubGoalGoal.id};
-        FileService.SaveTaskEventsToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd]);
-        setsubgoalAddedSuccessfully(true);
+        var sgAdd = {...addedSubGoal,id:subgoalliststate.length + 1,Goal_ID:selectedSubGoalGoal.id};
+        FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
+            if(response != null){
+                
+                window.MasterSubGoalsData=[...window.MasterSubGoalsData,sgAdd];
+                setsubgoalliststate(window.MasterSubGoalsData);
+                setsubgoalAddedSuccessfully(true);
+            }
+        });
+        
       }
 
 
@@ -81,9 +94,18 @@ export default function AddData() {
 
     
     const AddTask = ()=>{
-        var tAdd = {...AddTask,id:taskliststate.length,SubGoal_ID:selectedSubGoalGoal.id};
-        FileService.SaveTaskEventsToAWS('data/Tasks.json',[...taskliststate,tAdd]);
-        settaskAddedSuccessfully(true);
+        var tAdd = {...addedTask,id:taskliststate.length + 1,SubGoal_ID:selectedTaskSubGoal.id};
+        FileService.SaveDataToAWS('data/Tasks.json',[...taskliststate,tAdd],(response, err)=>{
+            if(response != null){
+                
+                
+                window.MasterTasksData=[...window.MasterTasksData,tAdd];
+                settaskliststate(window.MasterTasksData);
+                settaskAddedSuccessfully(true);
+
+            }
+        });
+        
       }
 
 
@@ -91,11 +113,11 @@ export default function AddData() {
         e.preventDefault();
         const name = e.target.name;
         const value = e.target.value;
-        if(type='Goal'){
+        if(type === 'Goal'){
             setaddedGoal({ ...addedGoal, [name]: value });
-        }else if (type='SubGoal'){
+        }else if (type === 'SubGoal'){
             setaddedSubGoal({ ...addedSubGoal, [name]: value });
-        }else if (type='Task'){
+        }else if (type === 'Task'){
             setaddedTask({ ...addedTask, [name]: value });
         }
       }
@@ -148,7 +170,10 @@ export default function AddData() {
                                                              <Form.Control name='StartDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.StartDate} ></Form.Control>
                                                              <Form.Label>End Date</Form.Label>
                                                              <Form.Control name='EndDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.EndDate} ></Form.Control>
-                                                             <Button variant='success' onClick={AddGoal}>Add Goal</Button>
+                                                             <Form.Group>
+                                                                <Button variant='success' onClick={AddGoal}>Add Goal</Button>
+                                                             </Form.Group>
+                                                             
                                 </Form.Group>
                             </Form>
                                     
@@ -181,10 +206,11 @@ export default function AddData() {
                                     
                                                              <Form.Label>Select Goal</Form.Label>
                                                              <Form.Control as='select' onChange={(e)=>{
-                                                                 if(e.target.value != 0){
+                                                                 if(e.target.value != ''){
                                                                     setselectedSubGoalGoal(goalliststate.filter((g)=>{return  g.id == e.target.value})[0]);
 
                                                                  }}} >
+                                                                     <option value='' >--------</option>
                                                                 {
                                                                     goalliststate.map((g)=>{
                                                                         
@@ -204,7 +230,10 @@ export default function AddData() {
                                                              <Form.Control name='Cycles' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Cycles} ></Form.Control>
                                                              <Form.Label>TotalTime</Form.Label>
                                                              <Form.Control name='TotalTime' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.TotalTime} ></Form.Control>
-                                                             <Button variant='success' onClick={AddSubGoal}>Add Subgoal</Button>
+                                                             <Form.Group>
+                                                                <Button variant='success' onClick={AddSubGoal}>Add Subgoal</Button>
+                                                             </Form.Group>
+                                                             
                                                              </>
                                                          }
                                                             
@@ -241,13 +270,13 @@ export default function AddData() {
                                                              <Form.Label>Select Goal</Form.Label>
                                                              <Form.Control as='select' onChange={(e)=>{
                                                                  setselectedTaskSubGoal();
-                                                                 if(e.target.value != 0){
+                                                                 if(e.target.value != ''){
                                                                     setselectedTaskGoal(goalliststate.filter((g)=>{return  g.id == e.target.value})[0]);                                                                    
 
                                                                  }
                                                                     
                                                                  }} >
-                                                                
+                                                                <option value='' >--------</option>
                                                                 {
                                                                     
                                                                     goalliststate.map((g)=>{
@@ -261,13 +290,13 @@ export default function AddData() {
                                                                 <>
                                                                  <Form.Label>Select Sub Goal</Form.Label>
                                                                  <Form.Control as='select' onChange={(e)=>{
-                                                                     if(e.target.value != 0){
+                                                                     if(e.target.value != ''){
                                                                         setselectedTaskSubGoal(subgoalliststate.filter((g)=>{return  g.id == e.target.value})[0]);
     
                                                                      }
                                                                         
                                                                      }} >
-                                                                    
+                                                                    <option value='' >--------</option>
                                                                     {
                                                                         
                                                                         subgoalliststate.map((g)=>{
@@ -292,7 +321,10 @@ export default function AddData() {
                                                                     <Form.Control name='Source' type='input' onChange={(e) => handleChange(e,'Task')} value={addedTask.Source} ></Form.Control>
                                                                     <Form.Label>TimePerCycle</Form.Label>
                                                                     <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'Task')} value={addedTask.TimePerCycle} ></Form.Control>
-                                                                    <Button variant='success' onClick={AddTask}>Add Task</Button>
+                                                                    <Form.Group>
+                                                                        <Button variant='success' onClick={AddTask}>Add Task</Button>
+                                                                    </Form.Group>
+                                                                    
                                                                 </>
                                                             }
                                                              

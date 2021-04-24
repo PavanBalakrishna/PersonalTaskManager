@@ -3,7 +3,7 @@ import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem,Button} from 'react-bootstrap';
 import {FileService} from '../../Services/Utilities';
 import AddTaskModal from '../Models/AddTaskModal'
-import {TasksContext} from '../../CustomContextProvider'
+//import {TasksContext} from '../../CustomContextProvider'
 
 
 
@@ -13,7 +13,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
     const [selectedTask, setselectedTask] = useState();
     const [taskEventList, settaskEventList] = useState();
     const [showAddTaskForm, setshowAddTaskForm] = useState(false);
-    const [masterListState, setmasterListState] = useState(useContext(TasksContext));
+    const [masterListState, setmasterListState] = useState(window.MasterTasksData);
 
         
     useEffect(() => {

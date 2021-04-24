@@ -2,7 +2,7 @@ import React,{useState,useEffect,useContext} from 'react'
 import {Container,Row,Col,Table,Card} from 'react-bootstrap';
 import {DataService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
-import {GoalsContext} from '../../CustomContextProvider'
+//import {GoalsContext} from '../../CustomContextProvider'
 
 
 
@@ -17,7 +17,7 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
         
     }
 
-    const [goallistState, setgoallistState] = useState(useContext(GoalsContext));
+    const [goallistState, setgoallistState] = useState(window.MasterGoalsData);
     const [showProgressBar, setshowProgressBar] = useState(false);
     
 

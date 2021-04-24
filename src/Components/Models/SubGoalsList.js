@@ -4,11 +4,11 @@ import TaskList from './TaskList'
 import CustomPieChart from '../CustomFIelds/CustomPieChart';
 import {DataService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
-import {SubGoalsContext} from '../../CustomContextProvider'
+//import {SubGoalsContext} from '../../CustomContextProvider'
 
 
 export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
-    const [SubGoalsState, setSubGoalsState] = useState(useContext(SubGoalsContext));
+    const [SubGoalsState, setSubGoalsState] = useState(window.MasterSubGoalsData);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();

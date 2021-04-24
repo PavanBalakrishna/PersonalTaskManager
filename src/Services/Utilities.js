@@ -86,7 +86,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
     }
 
 export const FileService ={
-        SaveTaskEventsToAWS:(searchFileKey, data,callbackFunction)=>{
+        SaveDataToAWS:(searchFileKey, data,callbackFunction)=>{
             AWS.config.update({
                 accessKeyId:config.aws.key,
                 secretAccessKey:config.aws.secret,
