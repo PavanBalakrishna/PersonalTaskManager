@@ -1,13 +1,14 @@
-import React,{useEffect,useState} from 'react'
-import {SubGoalsData} from '../../data/SubGoalsData'
+import React,{useEffect,useState,useContext} from 'react'
 import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
 import TaskList from './TaskList'
 import CustomPieChart from '../CustomFIelds/CustomPieChart';
 import {DataService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
+import {SubGoalsContext} from '../../CustomContextProvider'
+
 
 export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
-    const [SubGoalsState, setSubGoalsState] = useState(SubGoalsData);
+    const [SubGoalsState, setSubGoalsState] = useState(useContext(SubGoalsContext));
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();

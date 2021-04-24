@@ -1,9 +1,10 @@
-import React,{useEffect,useState} from 'react';
-import {TasksData} from '../../data/TasksData';
+import React,{useEffect,useState,useContext} from 'react';
 import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem,Button} from 'react-bootstrap';
 import {FileService} from '../../Services/Utilities';
 import AddTaskModal from '../Models/AddTaskModal'
+import {TasksContext} from '../../CustomContextProvider'
+
 
 
 export default function TaskList({setShowTaskList , subgoal}) {
@@ -12,11 +13,12 @@ export default function TaskList({setShowTaskList , subgoal}) {
     const [selectedTask, setselectedTask] = useState();
     const [taskEventList, settaskEventList] = useState();
     const [showAddTaskForm, setshowAddTaskForm] = useState(false);
+    const [masterListState, setmasterListState] = useState(useContext(TasksContext));
 
         
     useEffect(() => {
         
-        settaskListState(TasksData.filter((t)=>{return t.SubGoal_ID === subgoal.id }))
+        settaskListState(masterListState.filter((t)=>{return t.SubGoal_ID === subgoal.id }))
        
     }, [subgoal])
 

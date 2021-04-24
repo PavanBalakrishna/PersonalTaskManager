@@ -1,4 +1,4 @@
-export const GoalsData = [
+[
       {
         "id": 1,
         "Name": "Japanese",

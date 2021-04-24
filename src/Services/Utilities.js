@@ -1,6 +1,3 @@
-import {GoalsData} from '../data/GoalsData'
-import {SubGoalsData} from '../data/SubGoalsData'
-import {TasksData} from '../data/TasksData'
 var AWS = require('aws-sdk');
 var config = require('../config.json');
 
@@ -24,7 +21,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
             })
         }
 
-        GoalsData.forEach(g => {
+        window.MasterGoalsData.forEach(g => {
                 let mainGoal = {
                     ...g,
                     TotalTime:0,
@@ -32,7 +29,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
                     Percentage:0
                 };
                 
-                let sglist = SubGoalsData.filter(sg => sg.Goal_ID === g.id);
+                let sglist = window.MasterSubGoalsData.filter(sg => sg.Goal_ID === g.id);
                 sglist.forEach(sg=>{
                     let mainSubGoal ={
                         ...sg,
@@ -43,7 +40,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
                     //Adding total time
                     mainGoal.TotalTime += sg.TotalTime;
 
-                    let ltsklist = TasksData.filter(t => t.SubGoal_ID === sg.id);
+                    let ltsklist = window.MasterTasksData.filter(t => t.SubGoal_ID === sg.id);
 
                     ltsklist.forEach(t=>{
                         let mainTask ={

@@ -41,7 +41,7 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         
         
 
-            FileService.SaveTaskEventsToAWS("data/TaskEvents.json",taskdata,SaveTaskCallBackFunction);
+            FileService.SaveListToAWS("data/TaskEvents.json",taskdata,SaveTaskCallBackFunction);
             
         }
         
