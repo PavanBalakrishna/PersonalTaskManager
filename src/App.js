@@ -10,6 +10,7 @@ import Header from './Components/Static/Header'
 import Footer from './Components/Static/Footer'
 import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
+import AddData from './Components/Pages/AddData'
 import { FileService } from "./Services/Utilities";
 import {GoalsContext, SubGoalsContext, TasksContext} from'./CustomContextProvider';
 
@@ -81,12 +82,19 @@ function App() {
                 <AddTask />
               }
             </Route>
+            <Route path="/AddData">
+            {
+                masterGoalsSet && masterSubGoalsSet && masterTasksSet &&
+                <AddData />
+              }
+            </Route>
             <Route path="/">
             {
                 masterGoalsSet && masterSubGoalsSet && masterTasksSet &&
                 <List startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
               }
             </Route>
+       
       
                 </Switch>
             </Row>

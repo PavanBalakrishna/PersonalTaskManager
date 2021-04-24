@@ -84,23 +84,26 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
     }
 
 export const FileService ={
-        SaveTaskEventsToAWS:(searchFileKey, taskEventList,callbackFunction)=>{
+        SaveTaskEventsToAWS:(searchFileKey, data,callbackFunction)=>{
             AWS.config.update({
                 accessKeyId:config.aws.key,
                 secretAccessKey:config.aws.secret,
                 region:"ap-northeast-1"
             })
             var s3 = new AWS.S3();
-            let taskeventstring = JSON.stringify(taskEventList);
+            let dataString = JSON.stringify(data);
                 var params = {
-                Body: taskeventstring,
+                Body: dataString,
                 Bucket: "ptm.pavanbalakrishna.com",
                 Key:searchFileKey,
                 ACL:'public-read'
                 };
                 
                 return s3.putObject(params,(err, responseData)=>{
-                    callbackFunction( responseData,err);
+                    if(callbackFunction != null){
+                        callbackFunction( responseData,err);
+                    }
+                    
                 })
 
     },

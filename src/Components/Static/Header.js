@@ -17,7 +17,7 @@ export default function Header({startDateState, endDateState,setstartDateState, 
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link as={Link} to="/">List</Nav.Link> 
-                    <Nav.Link as={Link} to="/AddTask">Add Task</Nav.Link>  
+                    <Nav.Link as={Link} to="/AddData">Add Data</Nav.Link>  
                      
                 </Nav>
                 <Nav>
