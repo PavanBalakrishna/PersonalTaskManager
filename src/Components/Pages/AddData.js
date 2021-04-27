@@ -65,7 +65,7 @@ export default function AddData() {
 
     
     const AddSubGoal = ()=>{
-        var sgAdd = {...addedSubGoal,id:subgoalliststate.length + 1,Goal_ID:selectedSubGoalGoal.id};
+        var sgAdd = {...addedSubGoal,id:subgoalliststate.length + 1,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
         FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
             if(response != null){
                 
@@ -94,7 +94,7 @@ export default function AddData() {
 
     
     const AddTask = ()=>{
-        var tAdd = {...addedTask,id:taskliststate.length + 1,SubGoal_ID:selectedTaskSubGoal.id};
+        var tAdd = {...addedTask,id:taskliststate.length + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask=='' ? 1 : parseFloat(addedTask.TimePerCycles))};
         FileService.SaveDataToAWS('data/Tasks.json',[...taskliststate,tAdd],(response, err)=>{
             if(response != null){
                 
@@ -134,9 +134,9 @@ export default function AddData() {
                     
                     <ListGroup className="list-group-flush">
                             <ListGroupItem>
-                                <Button className='mr-5' onClick={showAddGoalSetion} >Add Goal</Button>
-                                <Button className='mr-5' onClick={showAddSubGoalSetion}>Add Subgoal</Button>
-                                <Button className='mr-5' onClick={showAddTaskSetion}>Add Task</Button>
+                                <Button className='mr-5 mb-2' onClick={showAddGoalSetion} >Add Goal</Button>
+                                <Button className='mr-5  mb-2' onClick={showAddSubGoalSetion}>Add Subgoal</Button>
+                                <Button className='mr-5  mb-2' onClick={showAddTaskSetion}>Add Task</Button>
                             </ListGroupItem>
                      
                         </ListGroup>

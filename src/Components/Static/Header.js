@@ -24,9 +24,7 @@ export default function Header({startDateState, endDateState,setstartDateState, 
                 <Form inline>
                     <ReportsBar startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} ></ReportsBar>
                  </Form>
-                </Nav>
-            
-              
+                </Nav>  
             </Navbar.Collapse>
             
 </Navbar>

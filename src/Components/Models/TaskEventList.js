@@ -29,9 +29,10 @@ export default function TaskEventList({task,setshowTaskEventListModal,showTaskEv
                     <tbody>
                         {
                             taskevents.map((taskevent)=>{
+                                let startDate = (taskevent.StartTime != '' ? new Date(taskevent.StartTime) : '');
                                 return <tr className='click-tr' key={taskevent.id} >
                                 {/* <td>{task.id}</td> */}
-                                <td>{taskevent.StartTime}</td>
+                                <td>{startDate.toString()}</td>
                                 <td>{taskevent.TimeSpent}</td>
                                 <td>{taskevent.Description}</td>
 

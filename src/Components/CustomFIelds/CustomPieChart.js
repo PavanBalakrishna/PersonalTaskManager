@@ -1,6 +1,6 @@
 import React from 'react'
 import { Pie,  PieChart, Tooltip,ResponsiveContainer } from 'recharts';
-import {Container,Row,Col} from 'react-bootstrap'
+
 
 
 export default function CustomBarChart({chartData,color}) {
