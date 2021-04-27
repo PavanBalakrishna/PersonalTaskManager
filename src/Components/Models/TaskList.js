@@ -35,11 +35,8 @@ export default function TaskList({setShowTaskList , subgoal}) {
         setshowAddTaskForm(true);
     }
     const ShowTaskEventList=(selectedtask)=>{
-        FileService.GetListFromAWS("data/TaskEvents.json",(response)=>{GetTaskEvents(response,selectedtask)});
-        
-       
+        GetTaskEvents(window.MasterTaskEventsData, selectedtask);
 
-        
     }
 
     return (

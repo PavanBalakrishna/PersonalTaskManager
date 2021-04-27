@@ -12,7 +12,7 @@ import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
 import AddData from './Components/Pages/AddData'
 import { FileService } from "./Services/Utilities";
-import {GoalsContext, SubGoalsContext, TasksContext} from'./CustomContextProvider';
+import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext} from'./CustomContextProvider';
 
 window.MasterGoalsData=[];
 window.MasterSubGoalsData=[];
@@ -24,12 +24,14 @@ function App() {
   
   const [masterGoalsSet, setmasterGoalsSet] = useState(false);
   const [masterSubGoalsSet, setmasterSubGoalsSet] = useState(false);
-  const [masterTasksSet, setmasterTasksSet] = useState(false)
+  const [masterTasksSet, setmasterTasksSet] = useState(false);
+  const [masterTaskEVentsSet, setmasterTaskEVentsSet] = useState(false);
   const [startDateState, setstartDateState] = useState();
   const [endDateState, setendDateState] = useState();
   const [goalsDataState, setgoalsDataState] = useState([]);
   const [subgoalsDataState, setsubgoalsDataState] = useState([]);
   const [tasksDataState, settasksDataState] = useState([]);
+  const [taskEventsDataState, settaskEventsDataState] = useState([]);
   
 
   useEffect(() => {
@@ -63,11 +65,24 @@ function App() {
     })
   }, []);
 
+  
+  useEffect(() => {
+    FileService.GetListFromAWS('data/TaskEvents.json',(list ,err)=>{
+      if(list != null){
+        window.MasterTaskEventsData=list;
+        settaskEventsDataState(list);
+        setmasterTaskEVentsSet(true);
+      }
+    })
+  }, []);
+
+
   return (
     <Router>
       <GoalsContext.Provider value={goalsDataState}>
         <SubGoalsContext.Provider value={subgoalsDataState}>
           <TasksContext.Provider value={tasksDataState}>
+            <TaskEventsContext.Provider value={taskEventsDataState}>
           <Container fluid>
             <Row>
               <Col>
@@ -78,19 +93,19 @@ function App() {
             <Switch>
             <Route path="/AddTask">
               {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet &&
+                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
                 <AddTask />
               }
             </Route>
             <Route path="/AddData">
             {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet &&
+                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
                 <AddData />
               }
             </Route>
             <Route path="/">
             {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet &&
+                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
                 <List startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
               }
             </Route>
@@ -106,6 +121,7 @@ function App() {
               </Col>
             </Row>
           </Container>
+          </TaskEventsContext.Provider>
           </TasksContext.Provider>
         </SubGoalsContext.Provider>
       </GoalsContext.Provider>
