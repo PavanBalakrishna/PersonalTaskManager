@@ -11,21 +11,16 @@ import Footer from './Components/Static/Footer'
 import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
 import AddData from './Components/Pages/AddData'
-import { FileService } from "./Services/Utilities";
+import { FileService,DataService } from "./Services/Utilities";
 import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext} from'./CustomContextProvider';
 
-window.MasterGoalsData=[];
-window.MasterSubGoalsData=[];
-window.MasterTasksData=[];
+window.MasterData=[];
+
 
 
 
 function App() {
-  
-  const [masterGoalsSet, setmasterGoalsSet] = useState(false);
-  const [masterSubGoalsSet, setmasterSubGoalsSet] = useState(false);
-  const [masterTasksSet, setmasterTasksSet] = useState(false);
-  const [masterTaskEVentsSet, setmasterTaskEVentsSet] = useState(false);
+  const [masterDataState, setmasterDataState] = useState(false);
   const [startDateState, setstartDateState] = useState();
   const [endDateState, setendDateState] = useState();
   const [goalsDataState, setgoalsDataState] = useState([]);
@@ -35,46 +30,25 @@ function App() {
   
 
   useEffect(() => {
-    FileService.GetListFromAWS('data/Goals.json',(list ,err)=>{
-      if(list != null){
-   
-        window.MasterGoalsData=list;
-        setgoalsDataState(list);
-        setmasterGoalsSet(true);
+    
+    var masterList = DataService.GetAllData().then((data)=>{
+      if(data != null){
+
+        setgoalsDataState(window.MasterData.GoalsList);
+        setsubgoalsDataState(window.MasterData.SubGoalsList);
+        settasksDataState(window.MasterData.TasksList);
+        settaskEventsDataState(window.MasterData.TaskEventsList);
+        setmasterDataState(true);
       }
-    })
+    });
+
+    
   }, []);
 
-  useEffect(() => {
-    FileService.GetListFromAWS('data/SubGoals.json',(list ,err)=>{
-      if(list != null){
-        window.MasterSubGoalsData=list;
-        setsubgoalsDataState(list);
-        setmasterSubGoalsSet(true);
-      }
-    })
-  }, []);
 
-  useEffect(() => {
-    FileService.GetListFromAWS('data/Tasks.json',(list ,err)=>{
-      if(list != null){
-        window.MasterTasksData=list;
-        settasksDataState(list);
-        setmasterTasksSet(true);
-      }
-    })
-  }, []);
 
   
-  useEffect(() => {
-    FileService.GetListFromAWS('data/TaskEvents.json',(list ,err)=>{
-      if(list != null){
-        window.MasterTaskEventsData=list;
-        settaskEventsDataState(list);
-        setmasterTaskEVentsSet(true);
-      }
-    })
-  }, []);
+
 
 
   return (
@@ -93,19 +67,19 @@ function App() {
             <Switch>
             <Route path="/AddTask">
               {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
+                masterDataState &&
                 <AddTask />
               }
             </Route>
             <Route path="/AddData">
             {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
+                masterDataState &&
                 <AddData />
               }
             </Route>
             <Route path="/">
             {
-                masterGoalsSet && masterSubGoalsSet && masterTasksSet && masterTaskEVentsSet &&
+                masterDataState &&
                 <List startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
               }
             </Route>

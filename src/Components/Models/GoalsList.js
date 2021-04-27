@@ -10,14 +10,13 @@ import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 export default function GoalsList({ClickGoal, startDateState, endDateState,setstartDateState, setendDateState}) {
 
     const GetGoalProgress = ()=>{
-        DataService.FetchMasterData(startDateState, endDateState, setstartDateState, setendDateState).then((masterdata)=>{
-            setgoallistState(masterdata.GoalsList);
-            setshowProgressBar(true);
-        });
+        setgoallistState(window.MasterData.GoalsList);
+        setshowProgressBar(true);
+      
         
     }
 
-    const [goallistState, setgoallistState] = useState(window.MasterGoalsData);
+    const [goallistState, setgoallistState] = useState(window.MasterData.GoalsList);
     const [showProgressBar, setshowProgressBar] = useState(false);
     
 
@@ -48,6 +47,7 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
                     <tr>
                     {/* <th>ID</th> */}
                     <th>Name</th>
+                    <td>Total Time Completed(Hours)</td>
                     <th>Description</th>
                     <th>Category</th>
                     <th>Start Date</th>
@@ -62,6 +62,7 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
                             <tr className='click-tr' key={goal.id} onClick={()=> {ClickGoal(goal)}}>
                             {/* <td>{goal.id}</td> */}
                             <td>{goal.Name}</td>
+                            <td>{goal.TotalTimeSpent}</td>
                             <td>{goal.Description}</td>
                             <td>{goal.Category}</td>
                             <td>{new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</td>

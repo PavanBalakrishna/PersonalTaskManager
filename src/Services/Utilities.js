@@ -1,7 +1,17 @@
 var AWS = require('aws-sdk');
 var config = require('../config.json');
 
-const GetMasterData = (taskeventsdata,startDate, endDate) => {
+const GetFormatDateString  = (date)=>{
+    let lDate = date;
+    if(date == null){
+        lDate = new Date();
+    }
+    return (lDate.getMonth() + 1) + 
+    "/" +  lDate.getDate() +
+    "/" +  lDate.getFullYear();
+}
+
+const GetMasterData = (goalslist,subgoalslist,taskslist,taskeventsdata,startDate, endDate) => {
      let masterList = {
         GoalsList:[],
         SubGoalsList:[],
@@ -21,7 +31,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
             })
         }
 
-        window.MasterGoalsData.forEach(g => {
+        goalslist.forEach(g => {
                 let mainGoal = {
                     ...g,
                     TotalTime:0,
@@ -29,7 +39,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
                     Percentage:0
                 };
                 
-                let sglist = window.MasterSubGoalsData.filter(sg => sg.Goal_ID === g.id);
+                let sglist = subgoalslist.filter(sg => sg.Goal_ID === g.id);
                 sglist.forEach(sg=>{
                     let mainSubGoal ={
                         ...sg,
@@ -40,7 +50,7 @@ const GetMasterData = (taskeventsdata,startDate, endDate) => {
                     //Adding total time
                     mainGoal.TotalTime += sg.TotalTime;
 
-                    let ltsklist = window.MasterTasksData.filter(t => t.SubGoal_ID === sg.id);
+                    let ltsklist = taskslist.filter(t => t.SubGoal_ID === sg.id);
 
                     ltsklist.forEach(t=>{
                         let mainTask ={
@@ -146,8 +156,27 @@ export const FileService ={
 }
 
 export const DataService = {
-    FetchMasterData : async (startDate, endDate)=>{
-       //let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
-       return GetMasterData(window.MasterTaskEventsData, startDate, endDate);
+    GetAllData : async (startDate, endDate)=>{
+        //let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
+        let goalsList =  await FileService.GetListFromAWS('data/Goals.json');
+        let subgoalsList =  await FileService.GetListFromAWS('data/SubGoals.json');
+        let tasksList =  await FileService.GetListFromAWS('data/Tasks.json');
+        let tasksEventsList =  await FileService.GetListFromAWS('data/TaskEvents.json');
+        let masterList = GetMasterData(goalsList, subgoalsList,tasksList ,tasksEventsList, startDate, endDate);
+        window.MasterData = masterList;
+        return Promise.resolve(masterList);
+     },
+    // FetchMasterData : async (startDate, endDate)=>{
+    //    //let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
+    //    return GetMasterData(window.MasterTaskEventsData, startDate, endDate);
+    // },
+    FetchReportData : async ()=>{
+        let overallData  = GetMasterData(window.MasterTaskEventsData);
+        let dailyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString());
+        let weeklyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString(new Date(Date.now() - 604800000)));
+        var monthDate = new Date();
+        monthDate.setMonth(monthDate.getMonth() - 1);
+
+        let monthlyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString(monthDate));
     }
 }

@@ -12,7 +12,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
     const [selectedTask, setselectedTask] = useState();
     const [taskEventList, settaskEventList] = useState();
     const [showAddTaskForm, setshowAddTaskForm] = useState(false);
-    const [masterListState, setmasterListState] = useState(window.MasterTasksData);
+    const [masterListState, setmasterListState] = useState(window.MasterData.TasksList);
 
         
     useEffect(() => {
@@ -34,7 +34,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
         setshowAddTaskForm(true);
     }
     const ShowTaskEventList=(selectedtask)=>{
-        GetTaskEvents(window.MasterTaskEventsData, selectedtask);
+        GetTaskEvents(window.MasterData.TaskEventsList, selectedtask);
 
     }
 

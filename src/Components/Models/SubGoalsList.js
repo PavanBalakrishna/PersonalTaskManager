@@ -8,10 +8,11 @@ import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 
 
 export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
-    const [SubGoalsState, setSubGoalsState] = useState(window.MasterSubGoalsData);
+    const [SubGoalsState, setSubGoalsState] = useState(window.MasterData.SubGoalsList);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();
+    const [subgoalCompletechartData, setsubgoalCompletechartData] = useState();
     const [showProgressBar, setshowProgressBar] = useState(false);
     
     const ShowTasks=(subgoal)=>{
@@ -31,11 +32,20 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
         });
         setsubgoalchartData(sgChartData);
 
-        DataService.FetchMasterData(startDateState, endDateState).then((masterlist)=>{
-            let filteredGoals =masterlist.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
-            setSubGoalsState(filteredGoals);
+        let spentsgChartData=[];
+        filteredGoals.forEach(sg => {
+            if(sg.TotalTimeSpent != 0 ){
+                spentsgChartData.push({name:sg.Name, value:sg.TotalTimeSpent});
+            }
+            
+        });
+        setsubgoalCompletechartData(spentsgChartData);
+
+
+        let filteredSubGoals = window.MasterData.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
+            setSubGoalsState(filteredSubGoals);
             setshowProgressBar(true);
-        })
+        
 
 
     }, [goal,startDateState,endDateState])
@@ -60,6 +70,7 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
                                 <Col sm='4'>
                                 <ListGroup className="list-group-flush">
                                     <ListGroupItem>Category : {goal.Category}</ListGroupItem>
+                                    <ListGroupItem>Time Spent : {goal.TotalTimeSpent}</ListGroupItem>
                                     <ListGroupItem>Start date : {new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</ListGroupItem>
                                     <ListGroupItem>End date : {new Date(goal.EndDate).getFullYear()+'/'+(new Date(goal.EndDate).getMonth()+1)+'/'+new Date(goal.EndDate).getDate()}</ListGroupItem>
                                 </ListGroup>
@@ -69,6 +80,11 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
                                 <Col sm='4'>
                                     
                                     <CustomPieChart chartData={subgoalchartData} color='#ac39ac'>
+                                    </CustomPieChart>
+                                </Col>
+                                <Col sm='4'>
+                                    
+                                    <CustomPieChart chartData={subgoalCompletechartData} color='#008000'>
                                     </CustomPieChart>
                                 </Col>
                             </Row>
@@ -89,7 +105,7 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
                 {/* <th>Description</th>
                 <th>Total Cycles</th>*/}
                 <th>Total Time</th> 
-                
+                <th>Total Time Spent</th> 
                 </tr>
             </thead>
             <tbody>
@@ -101,7 +117,7 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
                         {/* <td>{subgoal.Description}</td>
                         <td>{subgoal.Cycles}</td> */}
                         <td>{subgoal.TotalTime}</td>
-                        
+                        <td>{subgoal.TotalTimeSpent}</td>
                         </tr>
                         {
                             showProgressBar &&

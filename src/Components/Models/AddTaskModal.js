@@ -17,7 +17,7 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
 
     
     const AddTaskToTaskList = () => {
-        let taskeventid = window.MasterTaskEventsData.length+1;
+        let taskeventid = window.MasterData.TaskEventsList.length+1;
         let newtaskevent ={};
         newtaskevent.id=taskeventid;
         newtaskevent.Task_ID=selectedTask.id;
@@ -25,11 +25,11 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         newtaskevent.StartTime=new Date().toUTCString();
         newtaskevent.Description=addTaskDescription;
 
-        window.MasterTaskEventsData.push(newtaskevent);
+        window.MasterData.TaskEventsList.push(newtaskevent);
         
         
 
-            FileService.SaveDataToAWS("data/TaskEvents.json",window.MasterTaskEventsData, (data,err)=>{
+            FileService.SaveDataToAWS("data/TaskEvents.json",window.MasterData.TaskEventsList, (data,err)=>{
                 if(err != null){
                     setshowError(true);
                     setshowSuccess(false);

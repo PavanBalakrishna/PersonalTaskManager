@@ -8,9 +8,9 @@ export default function AddData() {
     const [showGoal, setshowGoal] = useState(false);
     const [showSubGoal, setshowSubGoal] = useState(false);
     const [showTask, setshowTask] = useState(false);
-    const [goalliststate, setgoalliststate] = useState(window.MasterGoalsData);
-    const [subgoalliststate, setsubgoalliststate] = useState(window.MasterSubGoalsData);
-    const [taskliststate, settaskliststate] = useState(window.MasterTasksData);
+    const [goalliststate, setgoalliststate] = useState(window.MasterData.GoalsList);
+    const [subgoalliststate, setsubgoalliststate] = useState(window.MasterData.SubGoalsList);
+    const [taskliststate, settaskliststate] = useState(window.MasterData.TasksList);
         
     
     
@@ -44,8 +44,8 @@ export default function AddData() {
         addedGoal.id = goalliststate.length + 1;
         FileService.SaveDataToAWS('data/Goals.json',[...goalliststate,addedGoal],(response, err)=>{
             if(response != null){
-                window.MasterGoalsData = [...window.MasterGoalsData, addedGoal];
-                setgoalliststate(window.MasterGoalsData);
+                window.MasterData.GoalsList = [...window.MasterData.GoalsList, addedGoal];
+                setgoalliststate(window.MasterData.GoalsList);
                 setgoalAddedSuccessfully(true);
             }
         });
@@ -69,8 +69,8 @@ export default function AddData() {
         FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
             if(response != null){
                 
-                window.MasterSubGoalsData=[...window.MasterSubGoalsData,sgAdd];
-                setsubgoalliststate(window.MasterSubGoalsData);
+                window.MasterData.SubGoalsList=[...window.MasterData.SubGoalsList,sgAdd];
+                setsubgoalliststate(window.MasterData.SubGoalsList);
                 setsubgoalAddedSuccessfully(true);
             }
         });
@@ -99,8 +99,8 @@ export default function AddData() {
             if(response != null){
                 
                 
-                window.MasterTasksData=[...window.MasterTasksData,tAdd];
-                settaskliststate(window.MasterTasksData);
+                window.MasterData.TasksList=[...window.MasterData.TasksList,tAdd];
+                settaskliststate(window.MasterData.TasksList);
                 settaskAddedSuccessfully(true);
 
             }
