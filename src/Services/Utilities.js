@@ -123,26 +123,31 @@ export const FileService ={
                  ResponseContentType: 'application/javascript'
             };
             
-            let promiseData = await s3.getObject(params,(err, responseData)=>{
-                    if (err) console.log(err, err.stack); // an error occurred
-                    else   {
-                        let uint8array = new TextEncoder().encode(responseData.Body);
-                        let resultbody = new TextDecoder().decode(uint8array);
-                        if(callbackFunction != null){
-                            callbackFunction(JSON.parse(resultbody),err);
-                        }
-                        
-                    } 
-                 }).promise();
-                 let uint8array = new TextEncoder().encode(promiseData.Body);
-                 let resultbody = new TextDecoder().decode(uint8array);
-                 return JSON.parse(resultbody);
+                if(callbackFunction != null){
+                    await s3.getObject(params,(err, responseData)=>{
+                        if (err) console.log(err, err.stack); // an error occurred
+                        else   {
+                            let uint8array = new TextEncoder().encode(responseData.Body);
+                            let resultbody = new TextDecoder().decode(uint8array);
+                            if(callbackFunction != null){
+                                callbackFunction(JSON.parse(resultbody),err);
+                            }
+                            
+                        } 
+                     })
+                }else{
+                    let promiseData = await s3.getObject(params).promise();
+                     let uint8array = new TextEncoder().encode(promiseData.Body);
+                     let resultbody = new TextDecoder().decode(uint8array);
+                     return JSON.parse(resultbody);
+                }
+         
             }
 }
 
 export const DataService = {
-    FetchMasterData : async (startDate, endDAte)=>{
-       let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
-       return GetMasterData(promiseData, startDate, endDAte);
+    FetchMasterData : async (startDate, endDate)=>{
+       //let promiseData = await FileService.GetListFromAWS("data/TaskEvents.json");
+       return GetMasterData(window.MasterTaskEventsData, startDate, endDate);
     }
 }

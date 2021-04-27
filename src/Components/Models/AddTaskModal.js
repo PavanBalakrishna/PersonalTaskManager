@@ -16,11 +16,8 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
     }
 
     
-    const AddTaskToTaskList = (taskdata,err) => {
-        if(err != null){
-            console.log(err);
-        }else{
-        let taskeventid = taskdata.length+1;
+    const AddTaskToTaskList = () => {
+        let taskeventid = window.MasterTaskEventsData.length+1;
         let newtaskevent ={};
         newtaskevent.id=taskeventid;
         newtaskevent.Task_ID=selectedTask.id;
@@ -28,32 +25,25 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         newtaskevent.StartTime=new Date().toUTCString();
         newtaskevent.Description=addTaskDescription;
 
-        taskdata.push(newtaskevent);
+        window.MasterTaskEventsData.push(newtaskevent);
         
         
 
-            FileService.SaveDataToAWS("data/TaskEvents.json",taskdata, (data,err)=>{
+            FileService.SaveDataToAWS("data/TaskEvents.json",window.MasterTaskEventsData, (data,err)=>{
                 if(err != null){
                     setshowError(true);
                     setshowSuccess(false);
                 }else{
-                    window.MasterTasksData = [...window.MasterTasksData, taskdata]
+                    
                     setshowError(false);
                     setshowSuccess(true);
                 }
             }
         );
             
-        }
+        
         
     };
-
-    const AddTask=()=>{
-
-        FileService.GetListFromAWS("data/TaskEvents.json",AddTaskToTaskList);
-        
-    }
-
 
     return (
         
@@ -105,7 +95,7 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
         </Button>
         {
             (!showSuccess && !showError) && 
-            <Button variant="primary" onClick={AddTask}>
+            <Button variant="primary" onClick={AddTaskToTaskList}>
                 Add Task
             </Button>
         }
