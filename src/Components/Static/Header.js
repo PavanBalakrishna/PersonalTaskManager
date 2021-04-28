@@ -1,11 +1,12 @@
-import React from 'react'
-import {Navbar,Nav,Container,Row,Col,Form} from 'react-bootstrap';
+import React,{useState} from 'react'
+import {Navbar,Nav,Container,Row,Col,Form,Button} from 'react-bootstrap';
 import {Link}  from "react-router-dom";
 import ReportsBar from '../Models/ReportsBar';
+import Summary from '../Models/Summary';
 
 
 export default function Header({startDateState, endDateState,setstartDateState, setendDateState, setrerenderForm}) {
-  
+    const [showReport, setshowReport] = useState(false)
 
     return (
         <Container fluid>
@@ -25,6 +26,10 @@ export default function Header({startDateState, endDateState,setstartDateState, 
                     <ReportsBar startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} setrerenderForm={setrerenderForm} ></ReportsBar>
                  </Form>
                 </Nav>  
+                <Nav>
+                    <Button variant='success' onClick={(e)=>{setshowReport(true)}}>Show Report</Button>
+                    <Summary  showReport={showReport} setshowReport={setshowReport}/>
+                </Nav>
             </Navbar.Collapse>
             
 </Navbar>

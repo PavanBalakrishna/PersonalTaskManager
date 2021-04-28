@@ -14,6 +14,7 @@ import AddData from './Components/Pages/AddData'
 import { DataService } from "./Services/Utilities";
 import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext} from'./CustomContextProvider';
 
+
 window.MasterData=[];
 
 
@@ -27,7 +28,8 @@ function App() {
   const [subgoalsDataState, setsubgoalsDataState] = useState([]);
   const [tasksDataState, settasksDataState] = useState([]);
   const [taskEventsDataState, settaskEventsDataState] = useState([]);
-  const [rerenderForm, setrerenderForm] = useState(false)
+  const [rerenderForm, setrerenderForm] = useState(false);
+
   
 
   useEffect(() => {
@@ -41,15 +43,13 @@ function App() {
         settaskEventsDataState(window.MasterData.TaskEventsList);
         setmasterDataState(true);
         setrerenderForm(!rerenderForm);
+
+      
       }
     });
+
+ 
   }, [startDateState, endDateState]);
-
-
-
-  
-
-
 
   return (
     <Router>
@@ -57,10 +57,17 @@ function App() {
         <SubGoalsContext.Provider value={subgoalsDataState}>
           <TasksContext.Provider value={tasksDataState}>
             <TaskEventsContext.Provider value={taskEventsDataState}>
+              
           <Container fluid>
+         
             <Row>
               <Col>
-                <Header  startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} setrerenderForm={setrerenderForm} />
+              {
+              masterDataState &&
+              
+              <Header  startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} setrerenderForm={setrerenderForm} />
+            }
+                
               </Col>
             </Row>
             <Row>

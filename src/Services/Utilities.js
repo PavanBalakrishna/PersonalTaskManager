@@ -171,12 +171,55 @@ export const DataService = {
     //    return GetMasterData(window.MasterTaskEventsData, startDate, endDate);
     // },
     FetchReportData : async ()=>{
-        let overallData  = GetMasterData(window.MasterTaskEventsData);
-        let dailyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString());
-        let weeklyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString(new Date(Date.now() - 604800000)));
+        let overallData  = GetMasterData(window.MasterData.GoalsList,window.MasterData.SubGoalsList,window.MasterData.TasksList, window.MasterData.TaskEventsList);
+        let dailyData  = GetMasterData(window.MasterData.GoalsList,window.MasterData.SubGoalsList,window.MasterData.TasksList, window.MasterData.TaskEventsList, GetFormatDateString());
+        let weeklyData  = GetMasterData(window.MasterData.GoalsList,window.MasterData.SubGoalsList,window.MasterData.TasksList, window.MasterData.TaskEventsList, GetFormatDateString(new Date(Date.now() - 604800000)));
         var monthDate = new Date();
         monthDate.setMonth(monthDate.getMonth() - 1);
 
-        let monthlyData  = GetMasterData(window.MasterTaskEventsData, GetFormatDateString(monthDate));
+        let monthlyData  = GetMasterData(window.MasterData.GoalsList,window.MasterData.SubGoalsList,window.MasterData.TasksList, window.MasterData.TaskEventsList, GetFormatDateString(monthDate));
+    
+        let ReportData ={
+            TotalHours:0,
+            DailyHours : 0,
+            WeeklyHours : 0,
+            MonthlyHours : 0,
+            OverAllHoursCompleted : 0,
+            DailyHoursCompleted : 0,
+            WeeklyHoursCompleted : 0,
+            MonthlyHoursCompleted : 0,
+
+        };
+        overallData.GoalsList.forEach((g)=>{
+            ReportData.TotalHours += g.TotalTime;
+            ReportData.OverAllHoursCompleted += g.TotalTimeSpent;
+        })
+
+        dailyData.GoalsList.forEach((g)=>{
+            ReportData.DailyHoursCompleted += g.TotalTimeSpent;
+        })
+
+
+        weeklyData.GoalsList.forEach((g)=>{
+            ReportData.WeeklyHoursCompleted += g.TotalTimeSpent;
+        })
+
+        monthlyData.GoalsList.forEach((g)=>{
+            ReportData.MonthlyHoursCompleted += g.TotalTimeSpent;
+        })
+        ReportData.MinimumHours = 5675;
+        
+        
+
+        ReportData.DaysLeft = (365 - Math.floor(Math.abs((new Date('2021-04-14').getTime() - new Date().getTime())/(1000 * 3600 * 24))))
+
+        ReportData.LeftWith = ReportData.TotalHours - ReportData.OverAllHoursCompleted;
+        ReportData.LeftWithPerDay = ReportData.LeftWith / ReportData.DaysLeft;
+        
+        ReportData.MinimumHoursRemianing = ReportData.MinimumHours - ReportData.OverAllHoursCompleted;
+
+        ReportData.PerDayAverage = ReportData.OverAllHoursCompleted/(365-ReportData.DaysLeft);
+
+        return Promise.resolve(ReportData);
     }
 }
