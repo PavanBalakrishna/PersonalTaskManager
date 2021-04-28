@@ -4,7 +4,7 @@ import {Link}  from "react-router-dom";
 import ReportsBar from '../Models/ReportsBar';
 
 
-export default function Header({startDateState, endDateState,setstartDateState, setendDateState}) {
+export default function Header({startDateState, endDateState,setstartDateState, setendDateState, setrerenderForm}) {
   
 
     return (
@@ -22,7 +22,7 @@ export default function Header({startDateState, endDateState,setstartDateState, 
                 </Nav>
                 <Nav>
                 <Form inline>
-                    <ReportsBar startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} ></ReportsBar>
+                    <ReportsBar startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} setrerenderForm={setrerenderForm} ></ReportsBar>
                  </Form>
                 </Nav>  
             </Navbar.Collapse>

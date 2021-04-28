@@ -7,7 +7,7 @@ import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 //import {SubGoalsContext} from '../../CustomContextProvider'
 
 
-export default function SubGoalsList({setShowGoalsList , goal, startDateState, endDateState,setstartDateState, setendDateState}) {
+export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
     const [SubGoalsState, setSubGoalsState] = useState(window.MasterData.SubGoalsList);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
@@ -48,7 +48,7 @@ export default function SubGoalsList({setShowGoalsList , goal, startDateState, e
         
 
 
-    }, [goal,startDateState,endDateState])
+    }, [goal,rerenderForm])
     
     const BackToGoalList= ()=>{
         setShowGoalsList(true);

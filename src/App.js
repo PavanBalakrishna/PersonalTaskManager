@@ -11,7 +11,7 @@ import Footer from './Components/Static/Footer'
 import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
 import AddData from './Components/Pages/AddData'
-import { FileService,DataService } from "./Services/Utilities";
+import { DataService } from "./Services/Utilities";
 import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext} from'./CustomContextProvider';
 
 window.MasterData=[];
@@ -27,11 +27,12 @@ function App() {
   const [subgoalsDataState, setsubgoalsDataState] = useState([]);
   const [tasksDataState, settasksDataState] = useState([]);
   const [taskEventsDataState, settaskEventsDataState] = useState([]);
+  const [rerenderForm, setrerenderForm] = useState(false)
   
 
   useEffect(() => {
     
-    var masterList = DataService.GetAllData().then((data)=>{
+    DataService.GetAllData(startDateState, endDateState).then((data)=>{
       if(data != null){
 
         setgoalsDataState(window.MasterData.GoalsList);
@@ -39,11 +40,10 @@ function App() {
         settasksDataState(window.MasterData.TasksList);
         settaskEventsDataState(window.MasterData.TaskEventsList);
         setmasterDataState(true);
+        setrerenderForm(!rerenderForm);
       }
     });
-
-    
-  }, []);
+  }, [startDateState, endDateState]);
 
 
 
@@ -60,7 +60,7 @@ function App() {
           <Container fluid>
             <Row>
               <Col>
-                <Header  startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
+                <Header  startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} setrerenderForm={setrerenderForm} />
               </Col>
             </Row>
             <Row>
@@ -80,7 +80,7 @@ function App() {
             <Route path="/">
             {
                 masterDataState &&
-                <List startDateState={startDateState} endDateState={endDateState} setstartDateState={setstartDateState} setendDateState={setendDateState} />
+                <List rerenderForm={rerenderForm} />
               }
             </Route>
        

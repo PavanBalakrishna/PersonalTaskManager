@@ -2,7 +2,7 @@ import React,{useState} from 'react'
 import {Container,Row,Col,Table,Card,Button,ListGroup,ListGroupItem,Form,ProgressBar} from 'react-bootstrap';
 
 
-export default function ReportsBar({startDateState, endDateState,setstartDateState, setendDateState}) {
+export default function ReportsBar({startDateState, endDateState,setstartDateState, setendDateState, setrerenderForm={setrerenderForm}}) {
     // const [startDateState, setstartDateState] = useState();
     // const [endDateState, setendDateState] = useState();
     // const [goallistState, setgoallistState] = useState();
@@ -32,6 +32,7 @@ export default function ReportsBar({startDateState, endDateState,setstartDateSta
         }else{
             setendDateState(dateValue);
         }
+        setrerenderForm(true);
     }
 
     return (

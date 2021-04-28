@@ -7,7 +7,7 @@ import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
 
 
 
-export default function GoalsList({ClickGoal, startDateState, endDateState,setstartDateState, setendDateState}) {
+export default function GoalsList({ClickGoal, rerenderForm}) {
 
     const GetGoalProgress = ()=>{
         setgoallistState(window.MasterData.GoalsList);
@@ -22,7 +22,7 @@ export default function GoalsList({ClickGoal, startDateState, endDateState,setst
 
     useEffect(()=>{
         GetGoalProgress();
-    },[startDateState,endDateState ])
+    },[rerenderForm ])
     
     
     
