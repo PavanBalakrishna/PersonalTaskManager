@@ -17,6 +17,7 @@ export default function AddData() {
     const [selectedSubGoalGoal, setselectedSubGoalGoal] = useState();
     const [selectedTaskGoal, setselectedTaskGoal] = useState();
     const [selectedTaskSubGoal, setselectedTaskSubGoal] = useState();
+    const [addSubgoalAsTask, setaddSubgoalAsTask] = useState(false);
     
 
     const [addedGoal, setaddedGoal] = useState({});
@@ -77,7 +78,9 @@ export default function AddData() {
                 newid = m.id;
             }
         })
-        var sgAdd = {...addedSubGoal,id:newid +1,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
+        newid=newid +1;
+        var sgAdd = {...addedSubGoal,id:newid,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
+        
         FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
             if(response != null){
                 
@@ -87,6 +90,17 @@ export default function AddData() {
             }
         });
         
+        if(addSubgoalAsTask == true){
+            let newTask = {
+                Name:addedSubGoal.Name,
+                Description:addedSubGoal.Description,
+                Source:addedSubGoal.Source,
+                TimePerCycle:addedSubGoal.TimePerCycle,
+                SubGoal_ID:newid
+            }
+            AddTask(newTask);
+            setaddSubgoalAsTask(false);
+        }
       }
 
 
@@ -105,14 +119,19 @@ export default function AddData() {
     }
 
     
-    const AddTask = ()=>{
+    const AddTask = (newTask)=>{
         let newid = 0;
         window.MasterData.TasksList.forEach((m)=>{
             if(m.id > newid){
                 newid = m.id;
             }
         })
-        var tAdd = {...addedTask,id:newid + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask=='' ? 1 : parseFloat(addedTask.TimePerCycles))};
+        if(newTask == null){
+            var tAdd = {...addedTask,id:newid + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask.TimePerCycles=='' ? 1 : parseFloat(addedTask.TimePerCycles))};       
+        }else{
+            var tAdd = {...newTask,id:newid + 1,TimePerCycles:(newTask.TimePerCycles=='' ? 1 : parseFloat(newTask.TimePerCycles))};       
+        }
+        
         FileService.SaveDataToAWS('data/Tasks.json',[...taskliststate,tAdd],(response, err)=>{
             if(response != null){
                 
@@ -248,9 +267,25 @@ export default function AddData() {
                                                              <Form.Control name='Cycles' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Cycles} ></Form.Control>
                                                              <Form.Label>TotalTime</Form.Label>
                                                              <Form.Control name='TotalTime' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.TotalTime} ></Form.Control>
-                                                             <Form.Group>
-                                                                <Button variant='success' onClick={AddSubGoal}>Add Subgoal</Button>
-                                                             </Form.Group>
+                                                             <Form.Label>Create Task</Form.Label>
+                                                             <Form.Control name='Add Task' type='checkbox' onChange={(e)=>{e.target.checked ? setaddSubgoalAsTask(true): setaddSubgoalAsTask(false)}} ></Form.Control>
+                                                             {
+                                                                 addSubgoalAsTask ?
+                                                                 <>
+                                                                 <Form.Label>Source</Form.Label>
+                                                                 <Form.Control name='Source' type='input' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Source} ></Form.Control>
+                                                                 <Form.Label>TimePerCycle</Form.Label>
+                                                                 <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.TimePerCycle} ></Form.Control>
+                                                                 <Form.Group>
+                                                                    <Button variant='success' onClick={AddSubGoal}>Add Subgoal And Task</Button>
+                                                                </Form.Group>
+                                                                </>
+                                                                :
+                                                                <Form.Group>
+                                                                    <Button variant='success' onClick={AddSubGoal}>Add Subgoal</Button>
+                                                                </Form.Group>
+                                                             }
+                                                             
                                                              
                                                              </>
                                                          }
@@ -340,7 +375,7 @@ export default function AddData() {
                                                                     <Form.Label>TimePerCycle</Form.Label>
                                                                     <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'Task')} value={addedTask.TimePerCycle} ></Form.Control>
                                                                     <Form.Group>
-                                                                        <Button variant='success' onClick={AddTask}>Add Task</Button>
+                                                                        <Button variant='success' onClick={()=>AddTask()}>Add Task</Button>
                                                                     </Form.Group>
                                                                     
                                                                 </>
