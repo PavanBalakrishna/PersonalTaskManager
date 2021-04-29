@@ -41,7 +41,13 @@ export default function AddData() {
 
     
     const AddGoal = ()=>{
-        addedGoal.id = goalliststate.length + 1;
+        let newid = 0;
+        window.MasterData.GoalsList.forEach((m)=>{
+            if(m.id > newid){
+                newid = m.id;
+            }
+        })
+        addedGoal.id = newid + 1;
         FileService.SaveDataToAWS('data/Goals.json',[...goalliststate,addedGoal],(response, err)=>{
             if(response != null){
                 window.MasterData.GoalsList = [...window.MasterData.GoalsList, addedGoal];
@@ -65,7 +71,13 @@ export default function AddData() {
 
     
     const AddSubGoal = ()=>{
-        var sgAdd = {...addedSubGoal,id:subgoalliststate.length + 1,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
+        let newid = 0;
+        window.MasterData.SubGoalsList.forEach((m)=>{
+            if(m.id > newid){
+                newid = m.id;
+            }
+        })
+        var sgAdd = {...addedSubGoal,id:newid +1,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
         FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
             if(response != null){
                 
@@ -94,7 +106,13 @@ export default function AddData() {
 
     
     const AddTask = ()=>{
-        var tAdd = {...addedTask,id:taskliststate.length + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask=='' ? 1 : parseFloat(addedTask.TimePerCycles))};
+        let newid = 0;
+        window.MasterData.TasksList.forEach((m)=>{
+            if(m.id > newid){
+                newid = m.id;
+            }
+        })
+        var tAdd = {...addedTask,id:newid + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask=='' ? 1 : parseFloat(addedTask.TimePerCycles))};
         FileService.SaveDataToAWS('data/Tasks.json',[...taskliststate,tAdd],(response, err)=>{
             if(response != null){
                 

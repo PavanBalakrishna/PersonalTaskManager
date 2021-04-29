@@ -17,7 +17,13 @@ export default function AddTaskModal({selectedTask ,showAddTaskForm, setshowAddT
 
     
     const AddTaskToTaskList = () => {
-        let taskeventid = window.MasterData.TaskEventsList.length+1;
+        let newid=0;
+        let taskeventid = window.MasterData.TaskEventsList.forEach((m)=>{
+            if(m.id > newid){
+                newid = m.id;
+            }
+        })
+        
         let newtaskevent ={};
         newtaskevent.id=taskeventid;
         newtaskevent.Task_ID=selectedTask.id;
