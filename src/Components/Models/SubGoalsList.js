@@ -2,18 +2,35 @@ import React,{useEffect,useState,useContext} from 'react'
 import {Container,Row,Col,Table,Button,Card,ListGroup,ListGroupItem,Collapse} from 'react-bootstrap';
 import TaskList from './TaskList'
 import CustomPieChart from '../CustomFIelds/CustomPieChart';
-import {DataService} from '../../Services/Utilities';
+
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
-//import {SubGoalsContext} from '../../CustomContextProvider'
+import UpdateData from './UpdateData';
+import {ReRenderContext} from '../../CustomContextProvider';
 
 
-export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
+
+
+export default function SubGoalsList({setShowGoalsList , goal}) {
+    const ReRenderContextObject = useContext(ReRenderContext);
+    
     const [SubGoalsState, setSubGoalsState] = useState(window.MasterData.SubGoalsList);
     const [selectedsubgoal, setselectedsubgoal] = useState({});
     const [ShowTasksState, setShowTasks] = useState(false);
     const [subgoalchartData, setsubgoalchartData] = useState();
     const [subgoalCompletechartData, setsubgoalCompletechartData] = useState();
     const [showProgressBar, setshowProgressBar] = useState(false);
+    
+    
+    const [showUpdateModal, setshowUpdateModal] = useState(false);
+    const [updateItem, setupdateItem] = useState();
+    const [updateType, setupdateType] = useState();
+
+
+    const SetUpdateModal = (Item, Type)=>{
+        setupdateItem(Item);
+        setupdateType(Type);
+        setshowUpdateModal(true);
+    }
     
     const ShowTasks=(subgoal)=>{
         setselectedsubgoal(subgoal);
@@ -23,19 +40,21 @@ export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
 
     useEffect(async () => {
 
-        let filteredGoals =SubGoalsState.filter((sg)=>{return sg.Goal_ID===goal.id});
+        let filteredGoals =window.MasterData.SubGoalsList.filter((sg)=>{return sg.Goal_ID===goal.id});
         setSubGoalsState(filteredGoals);
 
         let sgChartData=[];
         filteredGoals.forEach(sg => {
-            sgChartData.push({name:sg.Name, value:sg.TotalTime})
+            let localvalue = (sg.TotalTime != '' ? parseFloat(sg.TotalTime) : 0);
+            sgChartData.push({name:sg.Name, value:localvalue})
         });
         setsubgoalchartData(sgChartData);
 
         let spentsgChartData=[];
         filteredGoals.forEach(sg => {
+            let localvalue = (sg.TotalTimeSpent != '' ? parseFloat(sg.TotalTimeSpent) : 0);
             if(sg.TotalTimeSpent != 0 ){
-                spentsgChartData.push({name:sg.Name, value:sg.TotalTimeSpent});
+                spentsgChartData.push({name:sg.Name, value:localvalue});
             }
             
         });
@@ -48,7 +67,7 @@ export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
         
 
 
-    }, [goal,rerenderForm])
+    }, [goal,ReRenderContextObject.rerenderForm])
     
     const BackToGoalList= ()=>{
         setShowGoalsList(true);
@@ -96,14 +115,14 @@ export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
         </Col>
         </Row>
         <Row>
-            <Col sm='3'>
+            <Col sm='5'>
             <Table striped bordered hover responsive>
             <thead>
                 <tr>
                 {/* <th>ID</th> */}
                 <th>Name</th>
-                {/* <th>Description</th>
-                <th>Total Cycles</th>*/}
+                 <th>Description</th>
+                <th>Total Cycles</th>
                 <th>Total Time</th> 
                 <th>Total Time Spent</th> 
                 </tr>
@@ -111,13 +130,14 @@ export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
             <tbody>
                 {
                     SubGoalsState.map((subgoal)=>{
-                        return <><tr className='click-tr' key={subgoal.id} onClick={() => ShowTasks(subgoal)}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
+                        return <><tr  key={subgoal.id}  aria-controls="tasklist-show" aria-expanded={ShowTasksState}>
                         {/* <td>{subgoal.id}</td> */}
-                        <td>{subgoal.Name}</td>
-                        {/* <td>{subgoal.Description}</td>
-                        <td>{subgoal.Cycles}</td> */}
+                        <td className='click-tr' onClick={() => ShowTasks(subgoal)} >{subgoal.Name}</td>
+                        <td>{subgoal.Description}</td>
+                        <td>{subgoal.Cycles}</td> 
                         <td>{subgoal.TotalTime}</td>
                         <td>{subgoal.TotalTimeSpent}</td>
+                        <td><Button vaiant='info' onClick={()=>{SetUpdateModal(subgoal,'SubGoal')}}>Update</Button></td>
                         </tr>
                         {
                             showProgressBar &&
@@ -137,15 +157,17 @@ export default function SubGoalsList({setShowGoalsList , goal, rerenderForm}) {
             {
             ShowTasksState &&
             
-            <Col sm='9'>
+            <Col sm='7'>
             <Collapse in={ShowTasksState} timeout='5000'>
-                    <TaskList id='tasklist-show' subgoal={selectedsubgoal}>
+                    <TaskList id='tasklist-show' subgoal={selectedsubgoal} >
                     </TaskList>
                 </Collapse>
             </Col>
             
         }
         </Row>
+        <UpdateData Item={updateItem} Type={updateType} showUpdateModal={showUpdateModal} setshowUpdateModal={setshowUpdateModal} >
+              </UpdateData>
        
     </Container>
 

@@ -48,7 +48,7 @@ const GetMasterData = (goalslist,subgoalslist,taskslist,taskeventsdata,startDate
                         Percentage:0
                     }
                     //Adding total time
-                    mainGoal.TotalTime += sg.TotalTime;
+                    mainGoal.TotalTime += parseFloat(sg.TotalTime);
 
                     let ltsklist = taskslist.filter(t => t.SubGoal_ID === sg.id);
 

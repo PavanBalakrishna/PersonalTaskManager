@@ -12,7 +12,7 @@ import List from './Components/Pages/List'
 import AddTask from './Components/Pages/AddTask'
 import AddData from './Components/Pages/AddData'
 import { DataService } from "./Services/Utilities";
-import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext} from'./CustomContextProvider';
+import {GoalsContext, SubGoalsContext, TasksContext, TaskEventsContext, ReRenderContext} from'./CustomContextProvider';
 
 
 window.MasterData=[];
@@ -57,7 +57,10 @@ function App() {
         <SubGoalsContext.Provider value={subgoalsDataState}>
           <TasksContext.Provider value={tasksDataState}>
             <TaskEventsContext.Provider value={taskEventsDataState}>
-              
+              <ReRenderContext.Provider value={{
+                rerenderForm:rerenderForm,
+                setrerenderForm:setrerenderForm
+              }}>
           <Container fluid>
          
             <Row>
@@ -87,7 +90,7 @@ function App() {
             <Route path="/">
             {
                 masterDataState &&
-                <List rerenderForm={rerenderForm} />
+                <List rerenderForm={rerenderForm} setrerenderForm={setrerenderForm} />
               }
             </Route>
        
@@ -99,9 +102,11 @@ function App() {
               <Footer>
 
               </Footer>
+              
               </Col>
             </Row>
           </Container>
+          </ReRenderContext.Provider>
           </TaskEventsContext.Provider>
           </TasksContext.Provider>
         </SubGoalsContext.Provider>

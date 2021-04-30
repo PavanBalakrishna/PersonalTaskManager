@@ -4,7 +4,8 @@ import SubGoalsList from '../Models/SubGoalsList'
 import {Container} from 'react-bootstrap'
 
 
-export default function List({rerenderForm}) {
+
+export default function List() {
   const [showGoalsList, setShowGoalsList] = useState(true);
     const [currentGoal, setcurrentGoal] = useState();
     const ClickGoal=(goal)=>{
@@ -14,13 +15,13 @@ export default function List({rerenderForm}) {
     if(showGoalsList){
       return (
         <Container fluid>
-          <GoalsList ClickGoal={ClickGoal} rerenderForm={rerenderForm}></GoalsList>
+          <GoalsList ClickGoal={ClickGoal} ></GoalsList>
         </Container>
       )
     }else{
       return (
         <Container fluid>
-          <SubGoalsList setShowGoalsList={setShowGoalsList} goal={currentGoal} rerenderForm={rerenderForm}></SubGoalsList>
+          <SubGoalsList setShowGoalsList={setShowGoalsList} goal={currentGoal} ></SubGoalsList>
       </Container>
       )
     }

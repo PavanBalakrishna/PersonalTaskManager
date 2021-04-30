@@ -1,13 +1,13 @@
 import React,{useState,useEffect,useContext} from 'react'
-import {Container,Row,Col,Table,Card} from 'react-bootstrap';
+import {Container,Row,Col,Table,Card,Button} from 'react-bootstrap';
 import {DataService} from '../../Services/Utilities';
 import CustomProgressBar from '../CustomFIelds/CustomProgressBar';
-//import {GoalsContext} from '../../CustomContextProvider'
+import UpdateData from './UpdateData';
+import {ReRenderContext} from '../../CustomContextProvider';
 
 
 
-
-export default function GoalsList({ClickGoal, rerenderForm}) {
+export default function GoalsList({ClickGoal}) {
 
     const GetGoalProgress = ()=>{
         setgoallistState(window.MasterData.GoalsList);
@@ -16,13 +16,23 @@ export default function GoalsList({ClickGoal, rerenderForm}) {
         
     }
 
+    const ReRenderContextObject = useContext(ReRenderContext);
+
     const [goallistState, setgoallistState] = useState(window.MasterData.GoalsList);
     const [showProgressBar, setshowProgressBar] = useState(false);
-    
+    const [showUpdateModal, setshowUpdateModal] = useState(false);
+    const [updateItem, setupdateItem] = useState();
+    const [updateType, setupdateType] = useState();
+
+    const SetUpdateModal = (Item, Type)=>{
+        setupdateItem(Item);
+        setupdateType(Type);
+        setshowUpdateModal(true);
+    }
 
     useEffect(()=>{
         GetGoalProgress();
-    },[rerenderForm ])
+    },[ReRenderContextObject.rerenderForm])
     
     
     
@@ -59,14 +69,16 @@ export default function GoalsList({ClickGoal, rerenderForm}) {
                         goallistState.map((goal)=>{
 
                             return (<>
-                            <tr className='click-tr' key={goal.id} onClick={()=> {ClickGoal(goal)}}>
+                            <tr >
                             {/* <td>{goal.id}</td> */}
-                            <td>{goal.Name}</td>
+                            <td className='click-tr' key={goal.id} onClick={()=> {ClickGoal(goal)}}>{goal.Name}</td>
                             <td>{goal.TotalTimeSpent}</td>
                             <td>{goal.Description}</td>
                             <td>{goal.Category}</td>
                             <td>{new Date(goal.StartDate).getFullYear()+'/'+(new Date(goal.StartDate).getMonth()+1)+'/'+new Date(goal.StartDate).getDate()}</td>
                             <td>{new Date(goal.EndDate).getFullYear()+'/'+(new Date(goal.EndDate).getMonth()+1)+'/'+new Date(goal.EndDate).getDate()}</td>
+                            <td><Button vaiant='info' onClick={()=>{SetUpdateModal(goal,'Goal')}}>Update</Button></td>
+                            
                             </tr>
                             {
                                     showProgressBar &&
@@ -79,6 +91,8 @@ export default function GoalsList({ClickGoal, rerenderForm}) {
         
                             }
                             
+                            
+                            
                             </>)
                         })
                     }
@@ -87,6 +101,8 @@ export default function GoalsList({ClickGoal, rerenderForm}) {
 
                 </Col>
             </Row>
+            <UpdateData Item={updateItem} Type={updateType} showUpdateModal={showUpdateModal} setshowUpdateModal={setshowUpdateModal}>
+              </UpdateData>
         </Container>
             )
        

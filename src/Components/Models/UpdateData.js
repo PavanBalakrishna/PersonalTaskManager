@@ -1,9 +1,11 @@
 import React,{useState,useEffect,useContext} from 'react'
-import {Container,Row,Col,Button,Card,ListGroup,ListGroupItem,Form,Alert} from 'react-bootstrap';
+import {Container,Row,Col,Button,Card,ListGroup,ListGroupItem,Form,Alert,Modal} from 'react-bootstrap';
 import {FileService} from '../../Services/Utilities';
+import {ReRenderContext} from '../../CustomContextProvider';
 
 
-export default function AddData() {
+export default function UpdateData({Item,Type, showUpdateModal,setshowUpdateModal}) {
+    const ReRenderContextObject = useContext(ReRenderContext);
     const [showGoal, setshowGoal] = useState(false);
     const [showSubGoal, setshowSubGoal] = useState(false);
     const [showTask, setshowTask] = useState(false);
@@ -16,128 +18,93 @@ export default function AddData() {
     const [selectedSubGoalGoal, setselectedSubGoalGoal] = useState();
     const [selectedTaskGoal, setselectedTaskGoal] = useState();
     const [selectedTaskSubGoal, setselectedTaskSubGoal] = useState();
-    const [addSubgoalAsTask, setaddSubgoalAsTask] = useState(false);
+    
     
 
-    const [addedGoal, setaddedGoal] = useState({});
-    const [addedSubGoal, setaddedSubGoal] = useState({});
-    const [addedTask, setaddedTask] = useState({});
+    const [updateedGoal, setupdateedGoal] = useState({});
+    const [updateedSubGoal, setupdateedSubGoal] = useState({});
+    const [updateedTask, setupdateedTask] = useState({});
 
-    const [goalAddedSuccessfully, setgoalAddedSuccessfully] = useState(false);
-    const [subgoalAddedSuccessfully, setsubgoalAddedSuccessfully] = useState(false);
-    const [taskAddedSuccessfully, settaskAddedSuccessfully] = useState(false);
+    const [goalUpdateedSuccessfully, setgoalUpdateedSuccessfully] = useState(false);
+    const [subgoalUpdateedSuccessfully, setsubgoalUpdateedSuccessfully] = useState(false);
+    const [taskUpdateedSuccessfully, settaskUpdateedSuccessfully] = useState(false);
     
 
-    const showAddGoalSetion = ()=>{
-        setselectedSubGoalGoal();
-        setselectedTaskGoal();
-        setselectedTaskSubGoal();
-        setaddedGoal({});
-        setshowGoal(true);
-        setshowSubGoal(false);
-        setshowTask(false);
-        setgoalAddedSuccessfully(false);
-    }
+  
 
     
-    const AddGoal = ()=>{
-        let newid = 0;
-        window.MasterData.GoalsList.forEach((m)=>{
-            if(m.id > newid){
-                newid = m.id;
+    const UpdateGoal = ()=>{
+        
+        for(var i=0;i < window.MasterData.GoalsList.length;i++){
+            if(window.MasterData.GoalsList[i].id === updateedGoal.id){
+                window.MasterData.GoalsList[i] = updateedGoal;
             }
-        })
-        addedGoal.id = newid + 1;
-        FileService.SaveDataToAWS('data/Goals.json',[...goalliststate,addedGoal],(response, err)=>{
+        }
+ 
+        
+        FileService.SaveDataToAWS('data/Goals.json',window.MasterData.GoalsList,(response, err)=>{
             if(response != null){
-                window.MasterData.GoalsList = [...window.MasterData.GoalsList, addedGoal];
+                
                 setgoalliststate(window.MasterData.GoalsList);
-                setgoalAddedSuccessfully(true);
+                ReRenderContextObject.setrerenderForm(!ReRenderContextObject.rerenderForm);
+                setgoalUpdateedSuccessfully(true);
+                
             }
         });
         
       }
 
-      const showAddSubGoalSetion = ()=>{
-        setselectedSubGoalGoal();
-        setselectedTaskGoal();
-        setselectedTaskSubGoal();
-        setaddedSubGoal({});
-        setshowGoal(false);
-        setshowSubGoal(true);
-        setshowTask(false);
-        setsubgoalAddedSuccessfully(false);
-    }
-
     
-    const AddSubGoal = ()=>{
-        let newid = 0;
-        window.MasterData.SubGoalsList.forEach((m)=>{
-            if(m.id > newid){
-                newid = m.id;
-            }
-        })
-        newid=newid +1;
-        var sgAdd = {...addedSubGoal,id:newid,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(addedSubGoal.TotalTime),Cycles:(addedSubGoal.Cycles == '' ? 1 : parseInt(addedSubGoal.Cycles))};
+    const UpdateSubGoal = ()=>{
         
-        FileService.SaveDataToAWS('data/SubGoals.json',[...subgoalliststate,sgAdd],(response, err)=>{
+        
+        var sgUpdate = {...updateedSubGoal,Goal_ID:selectedSubGoalGoal.id,TotalTime:parseFloat(updateedSubGoal.TotalTime),Cycles:(updateedSubGoal.Cycles == '' ? 1 : parseInt(updateedSubGoal.Cycles))};
+        
+
+        for(var i=0;i < window.MasterData.SubGoalsList.length;i++){
+            if(window.MasterData.SubGoalsList[i].id === updateedSubGoal.id){
+                window.MasterData.SubGoalsList[i] = updateedSubGoal;
+            }
+        }
+
+        
+
+        FileService.SaveDataToAWS('data/SubGoals.json',window.MasterData.SubGoalsList,(response, err)=>{
             if(response != null){
                 
-                window.MasterData.SubGoalsList=[...window.MasterData.SubGoalsList,sgAdd];
+                
                 setsubgoalliststate(window.MasterData.SubGoalsList);
-                setsubgoalAddedSuccessfully(true);
+                ReRenderContextObject.setrerenderForm(!ReRenderContextObject.rerenderForm);
+                setsubgoalUpdateedSuccessfully(true);
+                
             }
         });
         
-        if(addSubgoalAsTask == true){
-            let newTask = {
-                Name:addedSubGoal.Name,
-                Description:addedSubGoal.Description,
-                Source:addedSubGoal.Source,
-                TimePerCycle:addedSubGoal.TimePerCycle,
-                SubGoal_ID:newid
-            }
-            AddTask(newTask);
-            setaddSubgoalAsTask(false);
-        }
+   
       }
 
-
-
-
-      const showAddTaskSetion = ()=>{
-        setselectedSubGoalGoal();
-        setselectedTaskGoal();
-        setselectedTaskSubGoal();
-        setaddedTask({});
-        setshowGoal(false);
-        setshowSubGoal(false);
-        setshowTask(true);
-
-        settaskAddedSuccessfully(false);
-    }
-
     
-    const AddTask = (newTask)=>{
-        let newid = 0;
-        window.MasterData.TasksList.forEach((m)=>{
-            if(m.id > newid){
-                newid = m.id;
-            }
-        })
-        if(newTask == null){
-            var tAdd = {...addedTask,id:newid + 1,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(addedTask.TimePerCycles=='' ? 1 : parseFloat(addedTask.TimePerCycles))};       
-        }else{
-            var tAdd = {...newTask,id:newid + 1,TimePerCycles:(newTask.TimePerCycles=='' ? 1 : parseFloat(newTask.TimePerCycles))};       
-        }
+    const UpdateTask = ()=>{
         
-        FileService.SaveDataToAWS('data/Tasks.json',[...taskliststate,tAdd],(response, err)=>{
+        
+            var tUpdate = {...updateedTask,SubGoal_ID:selectedTaskSubGoal.id,TimePerCycles:(updateedTask.TimePerCycles=='' ? 1 : parseFloat(updateedTask.TimePerCycles))};       
+       
+  
+
+            for(var i=0;i < window.MasterData.TasksList.length;i++){
+                if(window.MasterData.TasksList[i].id === tUpdate.id){
+                    window.MasterData.TasksList[i] = tUpdate;
+                }
+            }
+    
+           
+        
+        FileService.SaveDataToAWS('data/Tasks.json',window.MasterData.TasksList,(response, err)=>{
             if(response != null){
-                
-                
-                window.MasterData.TasksList=[...window.MasterData.TasksList,tAdd];
+
                 settaskliststate(window.MasterData.TasksList);
-                settaskAddedSuccessfully(true);
+                ReRenderContextObject.setrerenderForm(!ReRenderContextObject.rerenderForm);
+                settaskUpdateedSuccessfully(true);
 
             }
         });
@@ -150,64 +117,83 @@ export default function AddData() {
         const name = e.target.name;
         const value = e.target.value;
         if(type === 'Goal'){
-            setaddedGoal({ ...addedGoal, [name]: value });
+            setupdateedGoal({ ...updateedGoal, [name]: value });
         }else if (type === 'SubGoal'){
-            setaddedSubGoal({ ...addedSubGoal, [name]: value });
+            setupdateedSubGoal({ ...updateedSubGoal, [name]: value });
         }else if (type === 'Task'){
-            setaddedTask({ ...addedTask, [name]: value });
+            setupdateedTask({ ...updateedTask, [name]: value });
         }
       }
 
+      useEffect(()=>{
+        
+        if(Type === 'Goal'){
+            setupdateedGoal(Item);
+            setgoalUpdateedSuccessfully(false);
+            setshowGoal(true);
+            setshowSubGoal(false);
+            setshowTask(false);
+            
+
+        }else if (Type === 'SubGoal'){
+               
+            setupdateedSubGoal(Item);
+            setsubgoalUpdateedSuccessfully(false);
+            let selectedgoal = goalliststate.filter((g)=>{return  g.id == Item.Goal_ID})[0];
+            setselectedSubGoalGoal(selectedgoal);
+            setshowSubGoal(true);
+            setshowTask(false);
+            setshowGoal(false);
+        }else if (Type === 'Task'){
+                  
+            
+            setupdateedTask(Item);
+            settaskUpdateedSuccessfully(false);
+            let tsubgoal = subgoalliststate.filter((sg)=>{return  sg.id == Item.SubGoal_ID})[0];
+            let tgoal = goalliststate.filter((g)=>{return  g.id == tsubgoal.Goal_ID})[0];
+            setselectedTaskSubGoal(tsubgoal);
+            setselectedTaskGoal(tgoal);
+            setshowGoal(false);
+            setshowSubGoal(false);
+            setshowTask(true);
+        }
+
+      },[Item,showUpdateModal])
+
 
     return (
+        <Modal show={showUpdateModal}>
         <Container>
+
             <Row>
                 <Col>
-                <Card>
-                    
-                    <Card.Body>
-                    <Card.Title>Add Data</Card.Title>    
-                    
-                    <ListGroup className="list-group-flush">
-                            <ListGroupItem>
-                                <Button className='mr-5 mb-2' onClick={showAddGoalSetion} >Add Goal</Button>
-                                <Button className='mr-5  mb-2' onClick={showAddSubGoalSetion}>Add Subgoal</Button>
-                                <Button className='mr-5  mb-2' onClick={showAddTaskSetion}>Add Task</Button>
-                            </ListGroupItem>
-                     
-                        </ListGroup>
-                    </Card.Body>
-                </Card>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm='6'>
                     {
                         showGoal &&
                         <>
-                            <h3>Add a new Goal</h3>
+                            <h3>Update Goal - {Item.Name} </h3>
                             {
-                                    !goalAddedSuccessfully &&
+                                    !goalUpdateedSuccessfully &&
 
                                     <Form>
                                 <Form.Group>
                                                          
                                                              <Form.Label>Name</Form.Label>
-                                                             <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.Name} ></Form.Control>
+                                                             <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'Goal')} value={updateedGoal.Name} ></Form.Control>
                                                              <Form.Label>Description</Form.Label>
-                                                             <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.Description} ></Form.Control>
+                                                             <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'Goal')} value={updateedGoal.Description} ></Form.Control>
                                                              <Form.Label>Goal Category</Form.Label>
-                                                             <Form.Control name='Category' as='select' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.Category} >
+                                                             <Form.Control name='Category' as='select' onChange={(e) => handleChange(e,'Goal')} value={updateedGoal.Category} >
                                                                  <option>Study</option>
                                                                  <option>Work</option>
                                                                  <option>Personal</option>
                                                              </Form.Control>
                                                              <Form.Label>Start Date</Form.Label>
-                                                             <Form.Control name='StartDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.StartDate} ></Form.Control>
+                                                             <Form.Control name='StartDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={updateedGoal.StartDate} ></Form.Control>
                                                              <Form.Label>End Date</Form.Label>
-                                                             <Form.Control name='EndDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={addedGoal.EndDate} ></Form.Control>
+                                                             <Form.Control name='EndDate' type='date' onChange={(e) => handleChange(e,'Goal')} value={updateedGoal.EndDate} ></Form.Control>
                                                              <Form.Group>
-                                                                <Button variant='success' onClick={AddGoal}>Add Goal</Button>
+                                                             <Button  variant='warning' onClick={()=>{setshowUpdateModal(false)}}>Close</Button>
+                                                                <Button className='float-right'variant='success' onClick={UpdateGoal}>Update Goal</Button>
                                                              </Form.Group>
                                                              
                                 </Form.Group>
@@ -215,10 +201,10 @@ export default function AddData() {
                                     
                             }
                             {
-                                goalAddedSuccessfully && 
+                                goalUpdateedSuccessfully && 
 
                                 <Alert  variant='success'>
-                                    Goal Added Successfully
+                                    Goal Updateed Successfully
                                 </Alert>
 
                             }
@@ -228,20 +214,20 @@ export default function AddData() {
                 </Col>
             </Row>
             <Row>
-                <Col sm='6'>
+                <Col>
                     {
                         showSubGoal &&
                         <>
-                            <h3>Add a new Sub Goal</h3>
+                            <h3>Update Sub Goal - {Item.Name}</h3>
                             {
-                                    !subgoalAddedSuccessfully &&
+                                    !subgoalUpdateedSuccessfully &&
 
                                     <Form>
                                 <Form.Group>
                                     
                                     
                                                              <Form.Label>Select Goal</Form.Label>
-                                                             <Form.Control as='select' onChange={(e)=>{
+                                                             <Form.Control as='select' value={selectedSubGoalGoal.id} onChange={(e)=>{
                                                                  if(e.target.value != ''){
                                                                     setselectedSubGoalGoal(goalliststate.filter((g)=>{return  g.id == e.target.value})[0]);
 
@@ -259,31 +245,19 @@ export default function AddData() {
                                                              selectedSubGoalGoal &&
                                                              <>
                                                                  <Form.Label>Name</Form.Label>
-                                                             <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Name} ></Form.Control>
+                                                             <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'SubGoal')} value={updateedSubGoal.Name} ></Form.Control>
                                                              <Form.Label>Description</Form.Label>
-                                                             <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Description} ></Form.Control>
+                                                             <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'SubGoal')} value={updateedSubGoal.Description} ></Form.Control>
                                                              <Form.Label>Cycles</Form.Label>
-                                                             <Form.Control name='Cycles' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Cycles} ></Form.Control>
+                                                             <Form.Control name='Cycles' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={updateedSubGoal.Cycles} ></Form.Control>
                                                              <Form.Label>TotalTime</Form.Label>
-                                                             <Form.Control name='TotalTime' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.TotalTime} ></Form.Control>
-                                                             <Form.Label>Create Task</Form.Label>
-                                                             <Form.Control name='Add Task' type='checkbox' onChange={(e)=>{e.target.checked ? setaddSubgoalAsTask(true): setaddSubgoalAsTask(false)}} ></Form.Control>
-                                                             {
-                                                                 addSubgoalAsTask ?
-                                                                 <>
-                                                                 <Form.Label>Source</Form.Label>
-                                                                 <Form.Control name='Source' type='input' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.Source} ></Form.Control>
-                                                                 <Form.Label>TimePerCycle</Form.Label>
-                                                                 <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={addedSubGoal.TimePerCycle} ></Form.Control>
-                                                                 <Form.Group>
-                                                                    <Button variant='success' onClick={AddSubGoal}>Add Subgoal And Task</Button>
-                                                                </Form.Group>
-                                                                </>
-                                                                :
+                                                             <Form.Control name='TotalTime' type='number' onChange={(e) => handleChange(e,'SubGoal')} value={updateedSubGoal.TotalTime} ></Form.Control>
+                                                             
                                                                 <Form.Group>
-                                                                    <Button variant='success' onClick={AddSubGoal}>Add Subgoal</Button>
+                                                                <Button  variant='warning' onClick={()=>{setshowUpdateModal(false)}}>Close</Button>
+                                                                    <Button className='float-right' variant='success' onClick={UpdateSubGoal}>Update Subgoal</Button>
                                                                 </Form.Group>
-                                                             }
+                                                             
                                                              
                                                              
                                                              </>
@@ -294,10 +268,10 @@ export default function AddData() {
                                     
                             }
                             {
-                                subgoalAddedSuccessfully && 
+                                subgoalUpdateedSuccessfully && 
 
                                 <Alert  variant='success'>
-                                    Sub Goal Added Successfully
+                                    Sub Goal Updateed Successfully
                                 </Alert>
 
                             }
@@ -307,20 +281,20 @@ export default function AddData() {
                 </Col>
             </Row>
             <Row>
-                <Col sm='6'>
+                <Col >
                     {
                         showTask &&
                         <>
-                            <h3>Add a Task</h3>
+                            <h3>Update Task - {Item.Name}</h3>
                             {
-                                    !taskAddedSuccessfully &&
+                                    !taskUpdateedSuccessfully &&
 
                                     <Form>
                                 <Form.Group>
                                     
                                     
                                                              <Form.Label>Select Goal</Form.Label>
-                                                             <Form.Control as='select' onChange={(e)=>{
+                                                             <Form.Control as='select' value={selectedTaskGoal.id} onChange={(e)=>{
                                                                  setselectedTaskSubGoal();
                                                                  if(e.target.value != ''){
                                                                     setselectedTaskGoal(goalliststate.filter((g)=>{return  g.id == e.target.value})[0]);                                                                    
@@ -341,7 +315,7 @@ export default function AddData() {
                                                                  selectedTaskGoal &&
                                                                 <>
                                                                  <Form.Label>Select Sub Goal</Form.Label>
-                                                                 <Form.Control as='select' onChange={(e)=>{
+                                                                 <Form.Control as='select' value={selectedTaskSubGoal.id} onChange={(e)=>{
                                                                      if(e.target.value != ''){
                                                                         setselectedTaskSubGoal(subgoalliststate.filter((g)=>{return  g.id == e.target.value})[0]);
     
@@ -366,15 +340,17 @@ export default function AddData() {
                                                                 selectedTaskSubGoal &&
                                                                 <>
                                                                     <Form.Label>Task Name</Form.Label>
-                                                                    <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'Task')} value={addedTask.Name} ></Form.Control>
+                                                                    <Form.Control name='Name' type='input' onChange={(e) => handleChange(e,'Task')} value={updateedTask.Name} ></Form.Control>
                                                                     <Form.Label>Task Description</Form.Label>
-                                                                    <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'Task')} value={addedTask.Description} ></Form.Control>
+                                                                    <Form.Control name='Description' as='textarea' onChange={(e) => handleChange(e,'Task')} value={updateedTask.Description} ></Form.Control>
                                                                     <Form.Label>Source</Form.Label>
-                                                                    <Form.Control name='Source' type='input' onChange={(e) => handleChange(e,'Task')} value={addedTask.Source} ></Form.Control>
+                                                                    <Form.Control name='Source' type='input' onChange={(e) => handleChange(e,'Task')} value={updateedTask.Source} ></Form.Control>
                                                                     <Form.Label>TimePerCycle</Form.Label>
-                                                                    <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'Task')} value={addedTask.TimePerCycle} ></Form.Control>
+                                                                    <Form.Control name='TimePerCycle' type='number' onChange={(e) => handleChange(e,'Task')} value={updateedTask.TimePerCycle} ></Form.Control>
                                                                     <Form.Group>
-                                                                        <Button variant='success' onClick={()=>AddTask()}>Add Task</Button>
+                                                                    <Button variant='warning' onClick={()=>{setshowUpdateModal(false)}}>Close</Button>
+                                                                        <Button className='float-right' variant='success' onClick={()=>UpdateTask()}>Update Task</Button>
+                                                                         
                                                                     </Form.Group>
                                                                     
                                                                 </>
@@ -386,10 +362,10 @@ export default function AddData() {
                                     
                             }
                             {
-                                taskAddedSuccessfully && 
+                                taskUpdateedSuccessfully && 
 
                                 <Alert  variant='success'>
-                                    Task Added Successfully
+                                    Task Updateed Successfully
                                 </Alert>
 
                             }
@@ -398,6 +374,16 @@ export default function AddData() {
                     }
                 </Col>
             </Row>
+                    <Row>
+                        <Col>
+                        {
+                            (goalUpdateedSuccessfully || subgoalUpdateedSuccessfully || taskUpdateedSuccessfully) &&
+                            <Button variant='warning' onClick={()=>{setshowUpdateModal(false)}}>Close</Button>
+                        }
+                        </Col>
+                    </Row>
+
         </Container>
+        </Modal>
     )
 }

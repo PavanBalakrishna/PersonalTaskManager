@@ -2,11 +2,13 @@ import React,{useEffect,useState,useContext} from 'react';
 import TaskEventList from './TaskEventList';
 import {Container,Row,Col,Table,Card,ListGroup,ListGroupItem,Button} from 'react-bootstrap';
 import AddTaskModal from '../Models/AddTaskModal'
-//import {TasksContext} from '../../CustomContextProvider'
+import UpdateData from './UpdateData';
+import {ReRenderContext} from '../../CustomContextProvider';
 
 
 
-export default function TaskList({setShowTaskList , subgoal}) {
+export default function TaskList({subgoal}) {
+    const ReRenderContextObject = useContext(ReRenderContext);
     const [taskListState, settaskListState] = useState([]);
     const [showTaskEventListModal, setshowTaskEventListModal] = useState(false);
     const [selectedTask, setselectedTask] = useState();
@@ -14,12 +16,22 @@ export default function TaskList({setShowTaskList , subgoal}) {
     const [showAddTaskForm, setshowAddTaskForm] = useState(false);
     const [masterListState, setmasterListState] = useState(window.MasterData.TasksList);
 
+    const [showUpdateModal, setshowUpdateModal] = useState(false);
+    const [updateItem, setupdateItem] = useState();
+    const [updateType, setupdateType] = useState();
+
+
+			const SetUpdateModal = (Item, Type)=>{
+				setupdateItem(Item);
+				setupdateType(Type);
+				setshowUpdateModal(true);
+			}
         
     useEffect(() => {
         
         settaskListState(masterListState.filter((t)=>{return t.SubGoal_ID === subgoal.id }))
        
-    }, [subgoal])
+    }, [subgoal,ReRenderContextObject.rerenderForm])
 
     const GetTaskEvents =(taskdata,localselectedTask) => {
         settaskEventList(taskdata.filter(te => te.Task_ID == localselectedTask.id));
@@ -83,6 +95,7 @@ export default function TaskList({setShowTaskList , subgoal}) {
                                 <td>{task.TimePerCycle}</td>
                                 <td><Button variant='info' onClick={()=>{ShowTaskEventList(task)}}>View Events</Button></td>
                                 <td><Button variant='success' onClick={() => { AddTaskButtonClick(task) }}>Add Task Event</Button></td>
+                                <td><Button vaiant='info' onClick={()=>{SetUpdateModal(task,'Task')}}>Update</Button></td>
                                 </tr>
                             
                             })
@@ -101,6 +114,9 @@ export default function TaskList({setShowTaskList , subgoal}) {
                 showAddTaskForm && 
                 <AddTaskModal selectedTask={selectedTask} showAddTaskForm={showAddTaskForm} setshowAddTaskForm={setshowAddTaskForm}></AddTaskModal>
             }
+            
+            <UpdateData Item={updateItem} Type={updateType} showUpdateModal={showUpdateModal} setshowUpdateModal={setshowUpdateModal}>
+              </UpdateData>
         </Container>
     )
 }

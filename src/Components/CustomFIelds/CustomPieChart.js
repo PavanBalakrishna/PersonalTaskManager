@@ -1,9 +1,11 @@
-import React from 'react'
+import React,{useEffect,useContext} from 'react'
 import { Pie,  PieChart, Tooltip,ResponsiveContainer } from 'recharts';
-
+import {ReRenderContext} from '../../CustomContextProvider';
 
 
 export default function CustomBarChart({chartData,color}) {
+    const ReRenderContextObject = useContext(ReRenderContext);
+    useEffect(()=>{},[ReRenderContextObject.rerenderForm]);
     return (
         
                 <ResponsiveContainer height="100%">

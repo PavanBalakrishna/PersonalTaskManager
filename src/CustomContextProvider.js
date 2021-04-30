@@ -8,3 +8,5 @@ export const SubGoalsContext = React.createContext();
 export const TasksContext = React.createContext();
 
 export const TaskEventsContext = React.createContext();
+
+export const ReRenderContext = React.createContext();
